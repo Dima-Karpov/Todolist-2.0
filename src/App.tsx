@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Todolist } from './Todolist';
 
-function App() {
+export type TasksType = {
+  id: number
+  title: string
+  isDone: boolean
+};
+
+export const App: React.FC = React.memo(() => {
+
+  const tasks1: TasksType[] = [
+    {id: 1, title: 'HTML', isDone: true},
+    {id: 2, title: 'CSS', isDone: true},
+    {id: 3, title: 'React', isDone: false},
+  ];
+  const tasks2: TasksType[] = [
+    {id: 1, title: 'Read', isDone: true},
+    {id: 2, title: 'Communicate', isDone: true},
+    {id: 3, title: 'Read technical literature', isDone: false},
+  ];
+  const tasks3: TasksType[] = [
+    {id: 1, title: 'Theory', isDone: true},
+    {id: 2, title: 'Practice', isDone: true},
+    {id: 3, title: 'Just be a good guy', isDone: false},
+  ];
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Todolist title={'Learn Programming'} tasks={tasks1}/>
+      <Todolist title={'Learn English'} tasks={tasks2}/>
+      <Todolist title={'Learn to pass an interview'} tasks={tasks3}/>
     </div>
   );
-}
+});
 
-export default App;
+
