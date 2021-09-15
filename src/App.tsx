@@ -21,7 +21,7 @@ export const App: React.FC = React.memo(() => {
     {id: 3, title: 'Read technical literature', isDone: false},
   ];
   const tasks3: TasksType[] = [
-    {id: 1, title: 'Theory', isDone: true},
+    {id: 1, title: 'Theory', isDone: false},
     {id: 2, title: 'Practice', isDone: true},
     {id: 3, title: 'Just be a good guy', isDone: false},
   ];
