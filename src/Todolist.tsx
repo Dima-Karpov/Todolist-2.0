@@ -1,10 +1,11 @@
 import React from "react";
-import { TasksType } from "./App";
+import { FilterValuesType, TasksType } from "./App";
 
 type TodolistPropsType = {
   title: string
   tasks: TasksType[]
   removeTask: (id: number) => void
+  changeFilter: (value: FilterValuesType) => void
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
@@ -12,8 +13,15 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     title,
     tasks,
     removeTask,
+    changeFilter,
   } = props;
 
+  const currentTasks = tasks.map(t =>
+    <li key={t.id}><input type='checkbox' checked={t.isDone} />
+      <span>{t.title}</span>
+      <button onClick={() => removeTask(t.id)}>del</button>
+    </li>
+  );
 
 
   return (
@@ -24,19 +32,12 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
         <button>+</button>
       </div>
       <ul>
-        {
-          tasks.map(t =>
-            <li><input type='checkbox' checked={t.isDone} />
-              <span>{t.title}</span>
-              <button onClick={() => removeTask(t.id)}>del</button>
-            </li>
-          )
-        }
+        {currentTasks}
       </ul>
       <div>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button onClick={() => { changeFilter('all') }}>All</button>
+        <button onClick={() => { changeFilter('active') }}>Active</button>
+        <button onClick={() => { changeFilter('completed') }}>Completed</button>
       </div>
     </div>
   )

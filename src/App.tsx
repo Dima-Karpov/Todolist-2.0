@@ -8,6 +8,8 @@ export type TasksType = {
   isDone: boolean
 };
 
+export type FilterValuesType = 'all' | 'completed' | 'active';
+
 export const App: React.FC = React.memo(() => {
 
   const [tasks, setTasks] = useState<TasksType[]>([
@@ -15,17 +17,30 @@ export const App: React.FC = React.memo(() => {
     { id: 2, title: 'CSS', isDone: true },
     { id: 3, title: 'React', isDone: false },
   ]);
+  const [filter, setFilter] = useState<FilterValuesType>('all')
 
   const removeTask = (id: number) => {
     setTasks(tasks.filter(t => t.id !== id));
   };
+  const changeFilter = (value: FilterValuesType) => {
+    setFilter(value);
+  };
+
+  let tasksForTodolist = tasks;
+  if (filter === 'completed') {
+    tasksForTodolist = tasks.filter(t => t.isDone === true);
+  }
+  if (filter === 'active') {
+    tasksForTodolist = tasks.filter(t => t.isDone === false);
+  }
 
   return (
     <div className="App">
       <Todolist
         title={'Learn Programming'}
-        tasks={tasks}
+        tasks={tasksForTodolist}
         removeTask={removeTask}
+        changeFilter={changeFilter}
       />
     </div>
   );
