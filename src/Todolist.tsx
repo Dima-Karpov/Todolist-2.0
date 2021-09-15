@@ -4,12 +4,14 @@ import { TasksType } from "./App";
 type TodolistPropsType = {
   title: string
   tasks: TasksType[]
+  removeTask: (id: number) => void
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const {
     title,
-    tasks
+    tasks,
+    removeTask,
   } = props;
 
 
@@ -26,7 +28,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
           tasks.map(t =>
             <li><input type='checkbox' checked={t.isDone} />
               <span>{t.title}</span>
-              <button>del</button>
+              <button onClick={() => removeTask(t.id)}>del</button>
             </li>
           )
         }
