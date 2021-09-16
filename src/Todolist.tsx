@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState, KeyboardEvent, MouseEvent } from "react";
+import React, { ChangeEvent, useCallback, useState, KeyboardEvent } from "react";
 import { FilterValuesType, TasksType } from "./App";
 
 type TodolistPropsType = {
@@ -25,20 +25,26 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   };
   const addNewTask = useCallback(() => {
     addTask(newTaskTitle);
-    setNewTaskTitle('')
+    setNewTaskTitle('');
   }, [addTask, newTaskTitle]);
-
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      addNewTask()
+      addNewTask();
     }
   };
+  const onAllClickHandler = useCallback(() => changeFilter('all'), [changeFilter]);
+  const onActiveClickHandler = useCallback(() => changeFilter('active'), [changeFilter]);
+  const onCompletedClickHandler = useCallback(() => changeFilter('completed'), [changeFilter]);
 
-  const currentTasks = tasks.map(t =>
-    <li key={t.id}><input type='checkbox' checked={t.isDone} />
-      <span>{t.title}</span>
-      <button onClick={() => removeTask(t.id)}>del</button>
-    </li>
+  const currentTasks = tasks.map(t => {
+    const onRemoveHandler = () => removeTask(t.id);
+    return (
+      <li key={t.id}><input type='checkbox' checked={t.isDone} />
+        <span>{t.title}</span>
+        <button onClick={onRemoveHandler}>del</button>
+      </li>
+    )
+  }
   );
 
 
@@ -53,9 +59,9 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
         {currentTasks}
       </ul>
       <div>
-        <button onClick={() => { changeFilter('all') }}>All</button>
-        <button onClick={() => { changeFilter('active') }}>Active</button>
-        <button onClick={() => { changeFilter('completed') }}>Completed</button>
+        <button onClick={onAllClickHandler}>All</button>
+        <button onClick={onActiveClickHandler}>Active</button>
+        <button onClick={onCompletedClickHandler}>Completed</button>
       </div>
     </div>
   )
