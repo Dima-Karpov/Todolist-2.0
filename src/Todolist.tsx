@@ -1,11 +1,12 @@
-import React from "react";
+import React, { ChangeEvent, useCallback, useState, KeyboardEvent, MouseEvent } from "react";
 import { FilterValuesType, TasksType } from "./App";
 
 type TodolistPropsType = {
   title: string
   tasks: TasksType[]
-  removeTask: (id: number) => void
+  removeTask: (id: string) => void
   changeFilter: (value: FilterValuesType) => void
+  addTask: (title: string) => void
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
@@ -14,7 +15,24 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     tasks,
     removeTask,
     changeFilter,
+    addTask,
   } = props;
+
+  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+
+  const onChangeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewTaskTitle(e.currentTarget.value);
+  };
+  const addNewTask = useCallback(() => {
+    addTask(newTaskTitle);
+    setNewTaskTitle('')
+  }, [addTask, newTaskTitle]);
+
+  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addNewTask()
+    }
+  };
 
   const currentTasks = tasks.map(t =>
     <li key={t.id}><input type='checkbox' checked={t.isDone} />
@@ -28,8 +46,8 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     <div>
       <h3>{title}</h3>
       <div>
-        <input />
-        <button>+</button>
+        <input value={newTaskTitle} onChange={onChangeNewTaskTitle} onKeyPress={onKeyPressHandler} />
+        <button onClick={addNewTask} >+</button>
       </div>
       <ul>
         {currentTasks}
