@@ -7,6 +7,7 @@ type TodolistPropsType = {
   removeTask: (id: string) => void
   changeFilter: (value: FilterValuesType) => void
   addTask: (title: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean) => void
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
@@ -16,6 +17,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     removeTask,
     changeFilter,
     addTask,
+    changeTaskStatus,
   } = props;
 
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
@@ -38,8 +40,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
 
   const currentTasks = tasks.map(t => {
     const onRemoveHandler = () => removeTask(t.id);
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(t.id, e.currentTarget.checked);
     return (
-      <li key={t.id}><input type='checkbox' checked={t.isDone} />
+      <li key={t.id}>
+        <input type='checkbox' checked={t.isDone} onChange={onChangeHandler} />
         <span>{t.title}</span>
         <button onClick={onRemoveHandler}>del</button>
       </li>

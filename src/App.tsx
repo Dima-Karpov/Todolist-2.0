@@ -31,6 +31,9 @@ export const App: React.FC = React.memo(() => {
     const newTasks = [newTask, ...tasks];
     setTasks(newTasks);
   };
+  const changeStatus = (taskId: string, isDone: boolean) => {
+    setTasks(tasks.map(t => t.id === taskId ? {...t, isDone} : t))
+  };
 
   let tasksForTodolist = tasks;
   if (filter === 'completed') {
@@ -48,6 +51,7 @@ export const App: React.FC = React.memo(() => {
         removeTask={removeTask}
         changeFilter={changeFilter}
         addTask={addTask}
+        changeTaskStatus={changeStatus}
       />
     </div>
   );
