@@ -21,17 +21,23 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   } = props;
 
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const onChangeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setNewTaskTitle(e.currentTarget.value);
   };
+  
   const addNewTask = useCallback(() => {
     if (newTaskTitle.trim() !== '') {
       addTask(newTaskTitle.trim());
       setNewTaskTitle('');
+    } else {
+      setError('Title is requared')
     }
   }, [addTask, newTaskTitle]);
+
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    setError(null);
     if (e.key === 'Enter') {
       addNewTask();
     }
@@ -58,8 +64,16 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     <div>
       <h3>{title}</h3>
       <div>
-        <input value={newTaskTitle} onChange={onChangeNewTaskTitle} onKeyPress={onKeyPressHandler} />
+        <input
+          value={newTaskTitle}
+          onChange={onChangeNewTaskTitle}
+          onKeyPress={onKeyPressHandler}
+          className={error ? 'error' : ''}
+        />
         <button onClick={addNewTask} >+</button>
+
+        {error && <div className='error-message'>{error}</div>}
+
       </div>
       <ul>
         {currentTasks}
