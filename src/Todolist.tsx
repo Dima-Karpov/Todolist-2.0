@@ -52,7 +52,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     const onRemoveHandler = () => removeTask(t.id);
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(t.id, e.currentTarget.checked);
     return (
-      <li key={t.id}>
+      <li key={t.id} className={t.isDone ? 'is-done' : ''}>
         <input type='checkbox' checked={t.isDone} onChange={onChangeHandler} />
         <span>{t.title}</span>
         <button onClick={onRemoveHandler}>del</button>
