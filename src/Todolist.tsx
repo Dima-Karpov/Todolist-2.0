@@ -26,8 +26,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     setNewTaskTitle(e.currentTarget.value);
   };
   const addNewTask = useCallback(() => {
-    addTask(newTaskTitle);
-    setNewTaskTitle('');
+    if (newTaskTitle.trim() !== '') {
+      addTask(newTaskTitle.trim());
+      setNewTaskTitle('');
+    }
   }, [addTask, newTaskTitle]);
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
