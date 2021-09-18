@@ -8,6 +8,7 @@ type TodolistPropsType = {
   changeFilter: (value: FilterValuesType) => void
   addTask: (title: string) => void
   changeTaskStatus: (taskId: string, isDone: boolean) => void
+  filter: FilterValuesType
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
@@ -18,6 +19,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     changeFilter,
     addTask,
     changeTaskStatus,
+    filter,
   } = props;
 
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
@@ -26,7 +28,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const onChangeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setNewTaskTitle(e.currentTarget.value);
   };
-  
+
   const addNewTask = useCallback(() => {
     if (newTaskTitle.trim() !== '') {
       addTask(newTaskTitle.trim());
@@ -79,9 +81,9 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
         {currentTasks}
       </ul>
       <div>
-        <button onClick={onAllClickHandler}>All</button>
-        <button onClick={onActiveClickHandler}>Active</button>
-        <button onClick={onCompletedClickHandler}>Completed</button>
+        <button className={filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}>All</button>
+        <button className={filter === 'active' ? 'active-filter' : ''} onClick={onActiveClickHandler}>Active</button>
+        <button className={filter === 'completed' ? 'active-filter' : ''} onClick={onCompletedClickHandler}>Completed</button>
       </div>
     </div>
   )

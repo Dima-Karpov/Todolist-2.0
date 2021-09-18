@@ -32,7 +32,7 @@ export const App: React.FC = React.memo(() => {
     setTasks(newTasks);
   };
   const changeStatus = (taskId: string, isDone: boolean) => {
-    setTasks(tasks.map(t => t.id === taskId ? {...t, isDone} : t))
+    setTasks(tasks.map(t => t.id === taskId ? { ...t, isDone } : t))
   };
 
   let tasksForTodolist = tasks;
@@ -52,6 +52,7 @@ export const App: React.FC = React.memo(() => {
         changeFilter={changeFilter}
         addTask={addTask}
         changeTaskStatus={changeStatus}
+        filter={filter}
       />
     </div>
   );
