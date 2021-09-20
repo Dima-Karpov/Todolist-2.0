@@ -1,14 +1,16 @@
 import React, { ChangeEvent, useCallback, useState, KeyboardEvent } from "react";
-import { FilterValuesType, TasksType } from "./App";
+import { FilterValuesType, TaskType } from "./App";
 
 type TodolistPropsType = {
+  todolistId: string
   title: string
-  tasks: TasksType[]
-  removeTask: (id: string) => void
-  changeFilter: (value: FilterValuesType) => void
-  addTask: (title: string) => void
-  changeTaskStatus: (taskId: string, isDone: boolean) => void
+  tasks: TaskType[]
+  removeTask: (id: string, todolistId: string) => void
+  changeFilter: (value: FilterValuesType, todolistId: string) => void
+  addTask: (title: string, todolistId: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
   filter: FilterValuesType
+  removeTodolist: (todolistId: string) => void
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
@@ -20,6 +22,8 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     addTask,
     changeTaskStatus,
     filter,
+    todolistId,
+    removeTodolist,
   } = props;
 
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
@@ -31,12 +35,12 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
 
   const addNewTask = useCallback(() => {
     if (newTaskTitle.trim() !== '') {
-      addTask(newTaskTitle.trim());
+      addTask(newTaskTitle.trim(), todolistId);
       setNewTaskTitle('');
     } else {
       setError('Title is requared')
     }
-  }, [addTask, newTaskTitle]);
+  }, [addTask, newTaskTitle, todolistId]);
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     setError(null);
@@ -44,13 +48,17 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
       addNewTask();
     }
   };
-  const onAllClickHandler = useCallback(() => changeFilter('all'), [changeFilter]);
-  const onActiveClickHandler = useCallback(() => changeFilter('active'), [changeFilter]);
-  const onCompletedClickHandler = useCallback(() => changeFilter('completed'), [changeFilter]);
+  const onAllClickHandler = useCallback(() => changeFilter('all', todolistId), [changeFilter, todolistId]);
+  const onActiveClickHandler = useCallback(() => changeFilter('active', todolistId), [changeFilter, todolistId]);
+  const onCompletedClickHandler = useCallback(() => changeFilter('completed', todolistId), [changeFilter, todolistId]);
+
+  const deleteUnnecessaryTodolsit = useCallback(() => {
+    removeTodolist(todolistId);
+  }, [removeTodolist, todolistId]);
 
   const currentTasks = tasks.map(t => {
-    const onRemoveHandler = () => removeTask(t.id);
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(t.id, e.currentTarget.checked);
+    const onRemoveHandler = () => removeTask(t.id, todolistId);
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(t.id, e.currentTarget.checked, todolistId);
     return (
       <li key={t.id} className={t.isDone ? 'is-done' : ''}>
         <input type='checkbox' checked={t.isDone} onChange={onChangeHandler} />
@@ -62,9 +70,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   );
 
 
+
   return (
     <div>
-      <h3>{title}</h3>
+      <h3>{title} <button onClick={deleteUnnecessaryTodolsit}>del</button></h3>
       <div>
         <input
           value={newTaskTitle}
