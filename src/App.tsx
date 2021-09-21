@@ -62,6 +62,13 @@ export const App: React.FC = React.memo(() => {
         [todolistId]: tasks[todolistId].map(t => t.id === taskId ? { ...t, isDone } : t)
       })
   };
+  const changeTaskTitle = (taskId: string, title: string, todolistId: string) => {
+    setTasks(
+      {
+        ...tasks,
+        [todolistId]: tasks[todolistId].map(t => t.id === taskId ? { ...t, title } : t)
+      })
+  };
 
   const removeTodolist = (todolistId: string) => {
     setTodolists(todolists.filter(tl => tl.id !== todolistId));
@@ -79,6 +86,9 @@ export const App: React.FC = React.memo(() => {
       ...tasks,
       [newTodolist.id]: []
     });
+  };
+  const changeTodolistTitle = (todolistId: string, title: string) => {
+    setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, title } : tl))
   };
 
   return (
@@ -101,8 +111,10 @@ export const App: React.FC = React.memo(() => {
           changeFilter={changeFilter}
           addTask={addTask}
           changeTaskStatus={changeStatus}
+          changeTaskTitle={changeTaskTitle}
           filter={tl.filter}
           removeTodolist={removeTodolist}
+          changeTodolistTitle={changeTodolistTitle}
         />
       })
       }
