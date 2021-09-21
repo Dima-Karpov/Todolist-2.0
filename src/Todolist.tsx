@@ -1,5 +1,6 @@
-import React, { ChangeEvent, useCallback, useState, KeyboardEvent } from "react";
+import React, { ChangeEvent, useCallback, useMemo } from "react";
 import { FilterValuesType, TaskType } from "./App";
+import { AddItemForm } from "./components/AddItemForm/AddItermForm";
 
 type TodolistPropsType = {
   todolistId: string
@@ -26,28 +27,6 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     removeTodolist,
   } = props;
 
-  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-
-  const onChangeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewTaskTitle(e.currentTarget.value);
-  };
-
-  const addNewTask = useCallback(() => {
-    if (newTaskTitle.trim() !== '') {
-      addTask(newTaskTitle.trim(), todolistId);
-      setNewTaskTitle('');
-    } else {
-      setError('Title is requared')
-    }
-  }, [addTask, newTaskTitle, todolistId]);
-
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    setError(null);
-    if (e.key === 'Enter') {
-      addNewTask();
-    }
-  };
   const onAllClickHandler = useCallback(() => changeFilter('all', todolistId), [changeFilter, todolistId]);
   const onActiveClickHandler = useCallback(() => changeFilter('active', todolistId), [changeFilter, todolistId]);
   const onCompletedClickHandler = useCallback(() => changeFilter('completed', todolistId), [changeFilter, todolistId]);
@@ -68,24 +47,16 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     )
   }
   );
-
-
+  const addNewTask = useCallback((title: string) => {
+    addTask(title, todolistId)
+  },[addTask, title, todolistId])
 
   return (
     <div>
       <h3>{title} <button onClick={deleteUnnecessaryTodolsit}>del</button></h3>
-      <div>
-        <input
-          value={newTaskTitle}
-          onChange={onChangeNewTaskTitle}
-          onKeyPress={onKeyPressHandler}
-          className={error ? 'error' : ''}
-        />
-        <button onClick={addNewTask} >+</button>
 
-        {error && <div className='error-message'>{error}</div>}
+      <AddItemForm  addItem={addNewTask} />
 
-      </div>
       <ul>
         {currentTasks}
       </ul>
@@ -97,3 +68,4 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     </div>
   )
 });
+

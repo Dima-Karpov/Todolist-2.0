@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { v1 } from 'uuid';
 import './App.css';
+import { AddItemForm } from './components/AddItemForm/AddItermForm';
 import { Todolist } from './Todolist';
 
 export type TaskType = {
@@ -52,8 +53,7 @@ export const App: React.FC = React.memo(() => {
   };
   const addTask = (title: string, todolistId: string) => {
     const newTask: TaskType = { id: v1(), title, isDone: false };
-    const newTasks = { [todolistId]: [newTask, ...tasks[todolistId]], ...tasks }
-    setTasks(newTasks);
+    setTasks({ ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] });
   };
   const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
     setTasks(
@@ -68,9 +68,22 @@ export const App: React.FC = React.memo(() => {
     delete tasks[todolistId];
     setTasks({ ...tasks })
   };
+  const addTodolist = (title: string) => {
+    const newTodolist: TodolistType = {
+      id: v1(),
+      title,
+      filter: 'all'
+    }
+    setTodolists([newTodolist, ...todolists]);
+    setTasks({
+      ...tasks,
+      [newTodolist.id]: []
+    });
+  };
 
   return (
     <div className="App">
+      <AddItemForm addItem={addTodolist} />
       {todolists.map(tl => {
         let tasksForTodolist = tasks[tl.id];
         if (tl.filter === 'completed') {
