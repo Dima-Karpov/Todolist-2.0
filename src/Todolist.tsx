@@ -2,6 +2,11 @@ import React, { ChangeEvent, useCallback } from "react";
 import { FilterValuesType, TaskType } from "./App";
 import { AddItemForm } from "./components/AddItemForm/AddItermForm";
 import { EditableSpan } from "./components/EditableSpan/EditableSpan";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import { pink } from '@mui/material/colors';
 
 type TodolistPropsType = {
   todolistId: string
@@ -51,13 +56,23 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     const onChangeTitleHandler = (newValue: string) => changeTaskTitle(t.id, newValue, todolistId);
 
     return (
-      <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-        <input type='checkbox' checked={t.isDone} onChange={onChangeStatusHandler} />
+      <div key={t.id} className={t.isDone ? 'is-done' : ''}>
+        <Checkbox
+          checked={t.isDone}
+          onChange={onChangeStatusHandler}
+          sx={{
+            color: pink[800],
+            '&.Mui-checked': {
+              color: pink[600],
+            },
+          }} />
 
         <EditableSpan title={t.title} onChange={onChangeTitleHandler} />
 
-        <button onClick={onRemoveHandler}>del</button>
-      </li>
+        <IconButton color={'success'} size="small" onClick={onRemoveHandler}>
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
+      </div>
     )
   });
 
@@ -67,17 +82,22 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
 
   return (
     <div>
-      <h3> <EditableSpan title={title} onChange={replaceNewTitleTodolsit} /> <button onClick={deleteUnnecessaryTodolsit}>del</button></h3>
+      <h3>
+        <EditableSpan title={title} onChange={replaceNewTitleTodolsit} />
+        <IconButton color={'success'} size="medium" onClick={deleteUnnecessaryTodolsit}>
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
+      </h3>
 
       <AddItemForm addItem={addNewTask} />
 
-      <ul>
-        {currentTasks}
-      </ul>
       <div>
-        <button className={filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}>All</button>
-        <button className={filter === 'active' ? 'active-filter' : ''} onClick={onActiveClickHandler}>Active</button>
-        <button className={filter === 'completed' ? 'active-filter' : ''} onClick={onCompletedClickHandler}>Completed</button>
+        {currentTasks}
+      </div>
+      <div>
+        <Button variant={filter === 'all' ? 'outlined' : 'text'} onClick={onAllClickHandler}>All</Button>
+        <Button style={{ marginLeft: "5px" }}  color={'primary'} variant={filter === 'active' ? 'contained' : 'text'} onClick={onActiveClickHandler}>Active</Button>
+        <Button style={{ marginLeft: "5px" }}  color={'primary'} variant={filter === 'completed' ? 'contained' : 'text'} onClick={onCompletedClickHandler}>Completed</Button>
       </div>
     </div>
   )

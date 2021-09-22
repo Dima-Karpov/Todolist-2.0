@@ -1,11 +1,15 @@
 import React, { ChangeEvent, useCallback, useState, KeyboardEvent } from "react";
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import ControlPoint from "@mui/icons-material/ControlPoint";
+
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
-    const {  addItem, } = props;
+    const { addItem, } = props;
 
     const [newTaskTitle, setNewTaskTitle] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
@@ -32,14 +36,20 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
 
     return (
         <div>
-            <input
+            <TextField
                 value={newTaskTitle}
                 onChange={onChangeNewTaskTitle}
                 onKeyPress={onKeyPressHandler}
-                className={error ? 'error' : ''}
+                error={!!error}
+                label="Type value"
+                variant={'outlined'}
+                helperText={error}
             />
-            <button onClick={addNewItem} >+</button>
-            {error && <div className='error-message'>{error}</div>}
+
+            <IconButton onClick={addNewItem} color={'primary'}>
+                <ControlPoint />
+            </IconButton>
+
         </div>
     )
-})
+});
