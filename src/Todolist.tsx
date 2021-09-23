@@ -94,10 +94,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
       <div>
         {currentTasks}
       </div>
+
       <div>
         <Button variant={filter === 'all' ? 'outlined' : 'text'} onClick={onAllClickHandler}>All</Button>
-        <Button style={{ marginLeft: "5px" }}  color={'primary'} variant={filter === 'active' ? 'contained' : 'text'} onClick={onActiveClickHandler}>Active</Button>
-        <Button style={{ marginLeft: "5px" }}  color={'primary'} variant={filter === 'completed' ? 'contained' : 'text'} onClick={onCompletedClickHandler}>Completed</Button>
+        <Button style={{ marginLeft: "5px" }} color={'primary'} variant={filter === 'active' ? 'contained' : 'text'} onClick={onActiveClickHandler}>Active</Button>
+        <Button style={{ marginLeft: "5px" }} color={'primary'} variant={filter === 'completed' ? 'contained' : 'text'} onClick={onCompletedClickHandler}>Completed</Button>
       </div>
     </div>
   )

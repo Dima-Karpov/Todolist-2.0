@@ -29,11 +29,10 @@ export type FilterValuesType = 'all' | 'completed' | 'active';
 export type TaskStateType = {
   [key: string]: TaskType[]
 };
+export const todolistId1 = v1();
+export const todolistId2 = v1();
 
 export const App: React.FC = React.memo(() => {
-
-  const todolistId1 = v1();
-  const todolistId2 = v1();
 
   const [todolists, setTodolists] = useState<TodolistType[]>([
     { id: todolistId1, title: 'Learn Programming', filter: 'all' },
@@ -135,7 +134,7 @@ export const App: React.FC = React.memo(() => {
     <>
 
       <AppBar position="static">
-        <Toolbar style={{justifyContent:'space-between'}}>
+        <Toolbar style={{ justifyContent: 'space-between' }}>
           <IconButton
             size="large"
             edge="start"
@@ -152,7 +151,7 @@ export const App: React.FC = React.memo(() => {
         </Toolbar>
       </AppBar>
       <Container>
-        <Grid container style={{ padding: '20px 0px'}}>
+        <Grid container style={{ padding: '20px 0px' }}>
           <AddItemForm addItem={addTodolist} />
         </Grid>
         <Grid container spacing={7}>
@@ -162,5 +161,3 @@ export const App: React.FC = React.memo(() => {
     </ >
   );
 });
-
-
