@@ -1,8 +1,8 @@
-import { TaskType, todolistId1, todolistId2, TasksStateType } from "../App";
+import { TaskType, TasksStateType } from "../AppWithRedux";
 import { v1 } from 'uuid';
-import { AddTodolistAT, RemoveTodolistAT } from "./todolist-reducer";
+import { AddTodolistAT, RemoveTodolistAT, todolistId1, todolistId2 } from "./todolist-reducer";
 
-type ActionsType = 
+type ActionsType =
     ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof changeStatusAC>

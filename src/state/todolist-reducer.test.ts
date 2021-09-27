@@ -1,6 +1,6 @@
 import { v1 } from "uuid";
-import { TodolistType, FilterValuesType } from "../App";
-import { todolistReducer, removeTodolist, addTodolist, changeTodolistTitle, changeTodolistFilter } from "./todolist-reducer";
+import { TodolistType, FilterValuesType } from "../AppWithRedux";
+import { todolistReducer, removeTodolistAC, addTodolistAC, changeTodolistTitleAC, changeTodolistFilterAC } from "./todolist-reducer";
 
 test('the required todolist must leave', () => {
     const todolistId1 = v1();
@@ -11,7 +11,7 @@ test('the required todolist must leave', () => {
         { id: todolistId2, title: 'Learn English', filter: 'all' },
     ];
 
-    const endState = todolistReducer(startState, removeTodolist(todolistId2));
+    const endState = todolistReducer(startState, removeTodolistAC(todolistId2));
 
     expect(endState.length).toBe(1)
 });
@@ -25,7 +25,7 @@ test('the required todolist must be added', () => {
     ];
     const newTitle = 'I am new Todolist';
 
-    const endState = todolistReducer(startState, addTodolist(newTitle));
+    const endState = todolistReducer(startState, addTodolistAC(newTitle));
 
     expect(endState.length).toBe(3);
     expect(endState[2].title).toBe('Learn English');
@@ -41,7 +41,7 @@ test('corrent todolist should change its name', () => {
     ];
     const newTitle = 'I am new Todolist';
 
-    const endState = todolistReducer(startState, changeTodolistTitle(todolistId1, newTitle));
+    const endState = todolistReducer(startState, changeTodolistTitleAC(todolistId1, newTitle));
 
     expect(endState.length).toBe(2);
     expect(endState[1].title).toBe('Learn English');
@@ -58,7 +58,7 @@ test('orrent Todolist must change his filter', () => {
 
     const newFilter: FilterValuesType = 'active'
 
-    const endState = todolistReducer(startState, changeTodolistFilter(todolistId1, newFilter));
+    const endState = todolistReducer(startState, changeTodolistFilterAC(todolistId1, newFilter));
 
     expect(endState.length).toBe(2);
     expect(endState[0].title).toBe('Learn Programming');

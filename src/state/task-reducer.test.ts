@@ -1,7 +1,7 @@
 import { v1 } from "uuid";
-import { TasksStateType } from "../App";
-import { addTask, removeTask, taskReducer, changeStatus, changeTitle } from "./task-reducer";
-import { addTodolist } from "./todolist-reducer";
+import { TasksStateType } from "../AppWithRedux";
+import { addTaskAC, removeTaskAC, taskReducer, changeStatusAC, changeTitleAC } from "./task-reducer";
+import { addTodolistAC } from "./todolist-reducer";
 
 test('the unnecessary task is removed from the required tudulist', () => {
     const todolistId1 = v1();
@@ -20,7 +20,7 @@ test('the unnecessary task is removed from the required tudulist', () => {
         ],
     }
 
-    const endState = taskReducer(startState, removeTask(startState[todolistId2][0].id, todolistId2));
+    const endState = taskReducer(startState, removeTaskAC(startState[todolistId2][0].id, todolistId2));
 
     expect(endState[todolistId1].length).toBe(3);
     expect(endState[todolistId2].length).toBe(2);
@@ -45,7 +45,7 @@ test('a new task is added to the desired tudulist', () => {
         ]
     }
 
-    const endState = taskReducer(startState, addTask('New task', 'todolistId2'));
+    const endState = taskReducer(startState, addTaskAC('New task', 'todolistId2'));
 
     expect(endState['todolistId1'].length).toBe(3);
     expect(endState['todolistId2'].length).toBe(4);
@@ -67,7 +67,7 @@ test('the status in the required task must change', () => {
         ]
     }
     2
-    const endState = taskReducer(startState, changeStatus('3', true, 'todolistId1'));
+    const endState = taskReducer(startState, changeStatusAC('3', true, 'todolistId1'));
 
     expect(endState['todolistId1'].length).toBe(3);
     expect(endState['todolistId1'][2].title).toBe('React');
@@ -91,7 +91,7 @@ test('the title in the required task must change', () => {
         ]
     }
 
-    const endState = taskReducer(startState, changeTitle('3', 'Redux', 'todolistId1'));
+    const endState = taskReducer(startState, changeTitleAC('3', 'Redux', 'todolistId1'));
 
     expect(endState['todolistId1'].length).toBe(3);
     expect(endState['todolistId1'][2].title).toBe('Redux');
@@ -113,7 +113,7 @@ test('new property with new array should be added when new todolsit is added', (
         ],
     }
 
-    const endState = taskReducer(startState, addTodolist('new todolist'));
+    const endState = taskReducer(startState, addTodolistAC('new todolist'));
 
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k !== 'todolistId1' && k !== 'todolistId2');
