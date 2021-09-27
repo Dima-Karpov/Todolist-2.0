@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
+import { AppWithResucers } from './AppWithResucers';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <App />,
+  <AppWithResucers />,
   document.getElementById('root')
 );
 
