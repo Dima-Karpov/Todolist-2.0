@@ -10,6 +10,7 @@ type AddItemFormPropsType = {
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     const { addItem, } = props;
+    console.log('AddItemFrom is called')
 
     const [newTaskTitle, setNewTaskTitle] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +29,9 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     }, [addItem, newTaskTitle]);
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        if(error !== null){
+            setError(null);
+        }
         if (e.key === 'Enter') {
             addNewItem();
         }

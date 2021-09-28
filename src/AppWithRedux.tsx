@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { AppRootStateType } from './state/store';
+import { useCallback } from 'react';
 
 
 export type TaskType = {
@@ -26,7 +27,7 @@ export type TodolistType = {
   id: string
   title: string
   filter: FilterValuesType
-}
+};
 
 export type FilterValuesType = 'all' | 'completed' | 'active';
 export type TasksStateType = {
@@ -35,14 +36,14 @@ export type TasksStateType = {
 
 export const AppWithRedux: React.FC = React.memo(() => {
 
+  console.log('AppwithRedux is called')
+
   const dispatch = useDispatch();
   const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolist);
 
-  const addTodolist = (title: string) => {
-    const action = addTodolistAC(title);
-    dispatch(action);
-    // dispatch(action);
-  };
+  const addTodolist = useCallback((title: string) => {
+    dispatch( addTodolistAC(title));
+  }, [dispatch]);
 
   return (
     <>
