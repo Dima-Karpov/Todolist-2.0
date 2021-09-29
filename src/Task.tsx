@@ -4,34 +4,31 @@ import Checkbox from '@mui/material/Checkbox';
 import { pink } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch } from 'react-redux';
 
-import { changeStatusAC, changeTitleAC, removeTaskAC } from "./state/task-reducer";
 import { TaskType } from "./AppWithRedux";
 
 type TaskPropsType = {
   task: TaskType
   todolistId: string
+
+  removeTask: (id: string, todolistId: string) => void
+  onChangeTitleHandler: (id: string, newValue: string, todolistId: string) => void
+  onChangeStatusHandler: (id: string, isDone: boolean, todolistId: string) => void
 }
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
-  const { task, todolistId } = props
+  const { task, todolistId, removeTask, onChangeTitleHandler, onChangeStatusHandler } = props
 
-  const dispatch = useDispatch();
+  const deletingUnnecessaryTask = useCallback(() => {removeTask(task.id, todolistId)}, [removeTask, task.id, todolistId]);
 
-  const onRemoveHandler = useCallback(() =>
-    dispatch(removeTaskAC(task.id, todolistId)), [dispatch, todolistId, task.id]);
-    
-  const onChangeStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) =>
-    dispatch(changeStatusAC(task.id, e.currentTarget.checked, todolistId)), [dispatch, todolistId, task.id]);
+  const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {onChangeStatusHandler(task.id, e.currentTarget.checked, todolistId)}, [onChangeStatusHandler, task.id, todolistId])
 
-  const onChangeTitleHandler = useCallback((newValue: string) =>
-    dispatch(changeTitleAC(task.id, newValue, todolistId)), [dispatch, todolistId, task.id]);
+  const onChangeTaskTitle = useCallback((newValue: string) => {onChangeTitleHandler(task.id, newValue, todolistId)}, [onChangeTitleHandler, task.id, todolistId]);
 
   return (
     <div className={task.isDone ? 'is-done' : ''}>
       <Checkbox
         checked={task.isDone}
-        onChange={onChangeStatusHandler}
+        onChange={onChangeHandler}
         sx={{
           color: pink[800],
           '&.Mui-checked': {
@@ -39,9 +36,9 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
           },
         }} />
 
-      <EditableSpan title={task.title} onChange={onChangeTitleHandler} />
+      <EditableSpan title={task.title} onChange={onChangeTaskTitle} />
 
-      <IconButton color={'success'} size="small" onClick={onRemoveHandler}>
+      <IconButton color={'success'} size="small" onClick={deletingUnnecessaryTask}>
         <DeleteIcon fontSize="inherit" />
       </IconButton>
     </div>

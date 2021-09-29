@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { FilterValuesType, TaskType } from "./AppWithRedux";
-import { AddItemForm } from "./components/AddItemForm/AddItermForm";
+import { AddItemForm } from "./components/AddItemForm/AddItemForm";
 import { EditableSpan } from "./components/EditableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Task } from './Task'
 
 import { AppRootStateType } from "./state/store";
-import { addTaskAC } from "./state/task-reducer";
+import { addTaskAC, removeTaskAC, changeTitleAC, changeStatusAC } from "./state/task-reducer";
 import { changeTodolistFilterAC, removeTodolistAC, changeTodolistTitleAC } from "./state/todolist-reducer";
 
 type TodolistPropsType = {
@@ -24,7 +24,6 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     todolistId,
     filter
   } = props;
-  console.log('Todolist is called')
 
   const dispatch = useDispatch();
   const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.task[todolistId]);
@@ -40,6 +39,15 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     dispatch(changeTodolistTitleAC(todolistId, newTitle));
   }, [dispatch, todolistId]);
 
+
+  const removeTask = useCallback((id: string, todolistId: string) =>
+    dispatch(removeTaskAC(id, todolistId)), [dispatch]);
+
+  const onChangeTitleHandler = useCallback((id: string, newValue: string, todolistId: string) =>
+    dispatch(changeTitleAC(id, newValue, todolistId)), [dispatch]);
+
+  const onChangeStatusHandler = useCallback((id: string, isDone: boolean, todolistId: string) =>
+    dispatch(changeStatusAC(id, isDone, todolistId)), [dispatch]);
 
 
   const addNewTask = useCallback((title: string) => {
@@ -58,7 +66,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   }, [filter, tasks]);
 
   let newTasks = getTasksForTodoList();
-  const сurrentTasks = newTasks.map(t => <Task key={t.id} task={t} todolistId={todolistId} />);
+  const сurrentTasks = newTasks.map(t => <Task
+    key={t.id} task={t} todolistId={todolistId}
+    onChangeTitleHandler={onChangeTitleHandler}
+    removeTask={removeTask}
+    onChangeStatusHandler={onChangeStatusHandler} />);
 
 
   return (

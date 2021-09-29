@@ -7,7 +7,6 @@ type EditabelSpanPropsType = {
 };
 
 export const EditableSpan: React.FC<EditabelSpanPropsType> = React.memo(props => {
-  console.log('EditableSpan is called')
   const { title, onChange } = props;
 
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -31,6 +30,5 @@ export const EditableSpan: React.FC<EditabelSpanPropsType> = React.memo(props =>
     editMode
       ? <TextField value={newTitle} onChange={onChangeTitleHandler} onBlur={activateViewMode} autoFocus variant={'standard'} />
       : <span onDoubleClick={activateEditMode}>{title}</span>
-
   )
 });

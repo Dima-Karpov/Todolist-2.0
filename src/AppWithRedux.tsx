@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddItemForm } from './components/AddItemForm/AddItermForm';
+import { AddItemForm } from './components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist';
 import { addTodolistAC } from './state/todolist-reducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +36,6 @@ export type TasksStateType = {
 
 export const AppWithRedux: React.FC = React.memo(() => {
 
-  console.log('AppwithRedux is called')
 
   const dispatch = useDispatch();
   const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolist);
