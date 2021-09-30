@@ -6,6 +6,21 @@ module.exports = {
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app"
+    "@storybook/preset-create-react-app",
+    "@storybook/addon-storysource",
+    {
+      name: "@storybook/addon-storysource",
+      option: {
+        rule: {
+          test: [/\.stories\.tsx?$/],
+        },
+        loaderOptions: {
+          prettierConfig: {
+            printWidth: 80, singleQuote: false,
+            options: {parser: "typescript"}
+          }
+        }
+      }
+    }
   ]
 }
