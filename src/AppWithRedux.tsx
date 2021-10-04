@@ -3,6 +3,8 @@ import { AddItemForm } from './components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist';
 import { addTodolistAC } from './state/todolist-reducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppRootStateType } from './state/store';
+import { useCallback } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,8 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { AppRootStateType } from './state/store';
-import { useCallback } from 'react';
+
 
 
 export type TaskType = {
