@@ -28,13 +28,15 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     }, [addItem, newTaskTitle]);
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if(error !== null){
+        if (error !== null) {
             setError(null);
         }
         if (e.key === 'Enter') {
             addNewItem();
         }
     };
+
+    const blurHandler = useCallback(() => setError(null), []); // проследить по перерисовке;
 
     return (
         <div>
@@ -46,9 +48,10 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
                 label="Type value"
                 variant={'outlined'}
                 helperText={error}
+                onBlur={blurHandler}
             />
 
-            <IconButton onClick={addNewItem} color={'primary'}>
+            <IconButton onClick={addNewItem} color={'primary'} onBlur={blurHandler}>
                 <ControlPoint />
             </IconButton>
 
