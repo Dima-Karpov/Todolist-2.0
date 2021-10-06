@@ -1,7 +1,7 @@
 import React from 'react';
 import { AddItemForm } from './components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist';
-import { addTodolistAC } from './state/todolist-reducer';
+import { addTodolistAC, TodolistDomainType } from './state/todolist-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
 import { useCallback } from 'react';
@@ -15,31 +15,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { TasksStateType } from './state/task-reducer';
 
 
-
-export type TaskType = {
-  id: string
-  title: string
-  isDone: boolean
-};
-
-export type TodolistType = {
-  id: string
-  title: string
-  filter: FilterValuesType
-};
-
-export type FilterValuesType = 'all' | 'completed' | 'active';
-export type TasksStateType = {
-  [key: string]: TaskType[]
-};
 
 export const AppWithRedux: React.FC = React.memo(() => {
 
-
   const dispatch = useDispatch();
-  const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolist);
+  const todolists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolist);
+  const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.task);
 
   const addTodolist = useCallback((title: string) => {
     dispatch( addTodolistAC(title));
@@ -70,6 +54,7 @@ export const AppWithRedux: React.FC = React.memo(() => {
         </Grid>
         <Grid container spacing={7}>
           {todolists.map(tl => {
+            let allTodolistTasks = tasks[tl.id]
             return (
               <Grid item key={tl.id}>
                 <Paper elevation={3} style={{ padding: '10px' }}>
@@ -78,6 +63,8 @@ export const AppWithRedux: React.FC = React.memo(() => {
                     todolistId={tl.id}
                     title={tl.title}
                     filter={tl.filter}
+
+                    tasks={allTodolistTasks}
                   />
                 </Paper>
               </Grid>

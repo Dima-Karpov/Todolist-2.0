@@ -76,7 +76,7 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
-    entityStatus: RequestStatusType
+    // entityStatus: RequestStatusType
 };
 export type UpdateTaskModelType = {
     title: string
