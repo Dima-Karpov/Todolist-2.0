@@ -165,7 +165,7 @@ export const GetTasks = () => {
     )
 };
 
-after 179 => ['id1', 'id2'] => 'id1, id2'
+// after 179 => ['id1', 'id2'] => 'id1, id2' через map в return <div>{todolist.id}</div>
 
 export const AddTask = () => {
     const [stateTodolist, setStateTodolist] = useState<string[]>([]);

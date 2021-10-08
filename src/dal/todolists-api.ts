@@ -17,25 +17,26 @@ export const todolistApi = {
     // {item: TodolistType}
 
     createTodo(title: string) {
-    return instance.post<{title: string}, AxiosResponse<CommonResponseType<TodolistType>>>('todo-lists', {title})
+    return instance.post<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>('todo-lists', {title})
     },
     deletTodo(todolistId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
     },
     updateTodolist(todoListId: string, title: string) {
-        return instance.put(`todo-lists/${todoListId}`, { title })
+        return instance.put<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>(`todo-lists/${todoListId}`, { title })
     },
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     },
     addTask(todolistId: string, title: string) {
-        return instance.post<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks`, { title })
     },
     deletTask(todolistId: string, taskId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return instance.put<{},
+            AxiosResponse<CommonResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 };
 
