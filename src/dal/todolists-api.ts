@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { AnyIfEmpty } from 'react-redux';
 
 export const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -12,8 +13,11 @@ export const todolistApi = {
     getTodo() {
         return instance.get<TodolistType[]>('todo-lists')
     },
+
+    // {item: TodolistType}
+
     createTodo(title: string) {
-        return instance.post('todo-lists', { title })
+    return instance.post<{title: string}, AxiosResponse<CommonResponseType<TodolistType>>>('todo-lists', {title})
     },
     deletTodo(todolistId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
@@ -25,7 +29,7 @@ export const todolistApi = {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     },
     addTask(todolistId: string, title: string) {
-        return instance.post(`todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, { title })
     },
     deletTask(todolistId: string, taskId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
@@ -34,6 +38,8 @@ export const todolistApi = {
         return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 };
+
+
 
 export type CommonResponseType<T = {}> = {
     resultCode: number

@@ -26,7 +26,7 @@ export const CreateTodolist = () => {
 
     const addTodolist = () => {
         todolistApi.createTodo(title)
-            .then(res => {
+            .then((res: any) => {
                 setState(res.data)
                 alert(`You have created a new todolist with the title: ${title} .`)
             })
@@ -164,6 +164,9 @@ export const GetTasks = () => {
         </div>
     )
 };
+
+after 179 => ['id1', 'id2'] => 'id1, id2'
+
 export const AddTask = () => {
     const [stateTodolist, setStateTodolist] = useState<string[]>([]);
     const [stateTasks, setStateTasks] = useState<any>(null);
@@ -180,7 +183,7 @@ export const AddTask = () => {
 
     const createTask = () => {
         todolistApi.addTask(todolistId, title)
-            .then(res => {
+            .then((res: any) => {
                 setStateTasks(res.data);
                 alert(`Tasks was born on title: ${title}`);
             })
