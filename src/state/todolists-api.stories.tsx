@@ -101,7 +101,7 @@ export const UpdateTodolistTitle = () => {
             .catch(e => alert(e))
     };
     const updateTodolistTitle = () => {
-        todolistApi.updateTodolist(todolistId, title)
+        todolistApi.updateTodo(todolistId, title)
             .then(res => {
                 setState(res.data)
                 alert(`Todolist from id - ${todolistId} update title on - ${title} .`)

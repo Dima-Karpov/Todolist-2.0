@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AddItemForm } from './components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist';
-import { addTodolistAC, TodolistDomainType } from './state/todolist-reducer';
+import { addTodolistAC, TodolistDomainType, fetchTodolist } from './state/todolist-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
 import { useCallback } from 'react';
@@ -27,6 +27,10 @@ export const AppWithRedux: React.FC = React.memo(() => {
 
   const addTodolist = useCallback((title: string) => {
     dispatch( addTodolistAC(title));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTodolist())
   }, [dispatch]);
 
   return (

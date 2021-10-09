@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { AnyIfEmpty } from 'react-redux';
 
 export const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -13,16 +12,13 @@ export const todolistApi = {
     getTodo() {
         return instance.get<TodolistType[]>('todo-lists')
     },
-
-    // {item: TodolistType}
-
     createTodo(title: string) {
     return instance.post<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>('todo-lists', {title})
     },
     deletTodo(todolistId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
     },
-    updateTodolist(todoListId: string, title: string) {
+    updateTodo(todoListId: string, title: string) {
         return instance.put<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>(`todo-lists/${todoListId}`, { title })
     },
     getTasks(todolistId: string) {
@@ -35,7 +31,7 @@ export const todolistApi = {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return instance.put<{},
+        return instance.put< {},
             AxiosResponse<CommonResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 };
