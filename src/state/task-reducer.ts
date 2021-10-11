@@ -86,6 +86,8 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
     }
 }
 
+export const addTask = () => {}
+
 
 
 type ActionsType =
