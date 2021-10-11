@@ -64,7 +64,7 @@ export const taskReducer = (state: TasksStateType = initialState, action: Action
 };
 
 // action
-export const removeTaskAC = (id: string, todolistId: string) => ({ type: 'TASK/REMOVE-TASK', id, todolistId } as const);
+export const removeTaskAC = (todolistId: string, id: string) => ({ type: 'TASK/REMOVE-TASK', todolistId, id } as const);
 export const addTaskAC = (title: string, todolistId: string) => ({ type: 'TASK/ADD-TASK', title, todolistId } as const);
 export const changeStatusAC = (id: string, model: UpdateDomainTaskModelType, todolistId: string) =>
     ({ type: 'TASK/CHANGE-TASK-STATUS', id, model, todolistId } as const);
@@ -85,7 +85,16 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
 
     }
 }
+export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
+    try{
+        // status
+        await todolistApi.deletTask(todolistId, id)
+        dispatch(removeTaskAC(todolistId, id))
+        // status
+    } catch{
 
+    }
+}
 export const addTask = () => {}
 
 
