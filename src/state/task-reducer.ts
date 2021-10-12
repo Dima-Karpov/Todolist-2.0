@@ -1,4 +1,3 @@
-import { v1 } from 'uuid';
 import { Dispatch } from 'react';
 import { TaskPriorities, TaskStatuses, TaskType, todolistApi } from '../dal/todolists-api';
 import { AddTodolistAT, RemoveTodolistAT, SetTodolistasAT } from "./todolist-reducer";
@@ -11,19 +10,7 @@ export const taskReducer = (state: TasksStateType = initialState, action: Action
             state[action.todolistId] = state[action.todolistId].filter(t => t.id !== action.id);
             return { ...state };
         case 'TASK/ADD-TASK':
-            const newTask: TaskType = {
-                id: v1(),
-                title: action.title,
-                status: TaskStatuses.New,
-                todoListId: '',
-                startDate: '',
-                deadline: '',
-                addedDate: '',
-                order: 0,
-                priority: TaskPriorities.Low,
-                description: '',
-            };
-            return { ...state, [action.todolistId]: [newTask, ...state[action.todolistId]] };
+            return { ...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]] };
         case 'TASK/CHANGE-TASK-STATUS':
              return {
                 ...state,
@@ -65,7 +52,7 @@ export const taskReducer = (state: TasksStateType = initialState, action: Action
 
 // action
 export const removeTaskAC = (todolistId: string, id: string) => ({ type: 'TASK/REMOVE-TASK', todolistId, id } as const);
-export const addTaskAC = (title: string, todolistId: string) => ({ type: 'TASK/ADD-TASK', title, todolistId } as const);
+export const addTaskAC = (task: TaskType) => ({ type: 'TASK/ADD-TASK', task } as const);
 export const changeStatusAC = (id: string, model: UpdateDomainTaskModelType, todolistId: string) =>
     ({ type: 'TASK/CHANGE-TASK-STATUS', id, model, todolistId } as const);
 export const changeTitleAC = (id: string, title: string, todolistId: string) =>
@@ -95,7 +82,17 @@ export const deletTask = (todolistId: string, id: string) => async (dispatch: Th
 
     }
 }
-export const addTask = () => {}
+export const addTask = (todolistId: string, title: string) => async (dispatch: ThunkDispatch) => {
+    try{
+        //status
+        const res = await todolistApi.addTask(todolistId, title);
+        dispatch(addTaskAC(res.data.data.item))
+        console.log(res.data.data.item)
+        // status
+    } catch{
+
+    }
+}
 
 
 
