@@ -62,8 +62,10 @@ export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
     }
 };
 export const removeTodolist = (todolistId: string) => async (dispatch: ThunkDispatch) => {
-    try{
+    try {
+        // statys
         const res = await todolistApi.deletTodo(todolistId)
+        // status
     } catch {
 
     }
