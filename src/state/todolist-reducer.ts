@@ -18,14 +18,7 @@ export const todolistReducer = (state: TodolistDomainType[] = initialState, acti
         case 'TODOLIST/REMOVE-TODOLIST':
             return state.filter(tl => tl.id !== action.id)
         case 'TODOLIST/ADD-TODOLIST':
-            const newTodolist: TodolistDomainType = {
-                id: action.id,
-                title: action.title,
-                filter: 'all',
-                addedDate: '',
-                order: 0,
-            }
-            return [newTodolist, ...state]
+            return [{...action.todolist, filter: 'all'}, ...state]
         case 'TODOLIST/CHANGE-TODOLIST-TITLE':
             return state.map(tl => tl.id === action.id ? { ...tl, title: action.title } : tl)
         case 'TODOLIST/CHANGE-TODOLIST-FILTER':
@@ -43,7 +36,7 @@ export const todolistReducer = (state: TodolistDomainType[] = initialState, acti
 
 // action
 export const removeTodolistAC = (id: string) => ({ type: 'TODOLIST/REMOVE-TODOLIST', id } as const);
-export const addTodolistAC = (title: string) => ({ type: 'TODOLIST/ADD-TODOLIST', title, id: v1() } as const);
+export const addTodolistAC = (todolist: TodolistType) => ({ type: 'TODOLIST/ADD-TODOLIST',todolist } as const);
 export const changeTodolistTitleAC = (id: string, title: string) => ({ type: 'TODOLIST/CHANGE-TODOLIST-TITLE', id, title } as const);
 export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) => ({ type: 'TODOLIST/CHANGE-TODOLIST-FILTER', id, filter } as const);
 export const setTodolists = (todolist: TodolistType[]) => ({ type: 'TODOLIST/SET-TODOLISTS', todolist } as const);
@@ -52,21 +45,44 @@ export const setTodolists = (todolist: TodolistType[]) => ({ type: 'TODOLIST/SET
 export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
     try{
         // status
-        const res = await todolistApi.getTodo()
+        const res = await todolistApi.getTodo();
         dispatch(setTodolists(res.data));
-        res.data.forEach(tl => dispatch(fetchTasks(tl.id)))
+        res.data.forEach(tl => dispatch(fetchTasks(tl.id)));
          // status
         return res.data;
     } catch(e: any){
 
     }
 };
-export const removeTodolist = (todolistId: string) => async (dispatch: ThunkDispatch) => {
+export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDispatch) => {
     try {
         // statys
-        const res = await todolistApi.deletTodo(todolistId)
+        await todolistApi.deletTodo(todoListId);
+        dispatch(removeTodolistAC(todoListId));
         // status
-    } catch {
+    } catch(e: any) {
+
+    }
+};
+
+export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) => {
+    try{
+        // status
+       const res = await todolistApi.createTodo(title);
+        dispatch(addTodolistAC(res.data.data.item))
+        // status
+    } catch (e: any){
+
+    }
+};
+
+export const changeTodolistTitle = (todolistId: string, title: string) => async (dispatch: ThunkDispatch) => {
+    try{
+        // status
+        todolistApi.updateTodo(todolistId, title);
+        dispatch(changeTodolistTitleAC(todolistId, title));
+        // status
+    } catch (e: any){
 
     }
 }

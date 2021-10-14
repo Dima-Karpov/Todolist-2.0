@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Task } from './Task'
 
 import { changeTitleAC, changeStatusAC, deletTask, addTask } from "./state/task-reducer";
-import { changeTodolistFilterAC, removeTodolistAC, changeTodolistTitleAC, FilterValuesType } from "./state/todolist-reducer";
+import { changeTodolistFilterAC, removeTodolist, changeTodolistTitle, FilterValuesType } from "./state/todolist-reducer";
 import { TaskStatuses, TaskType } from "./dal/todolists-api";
 
 type TodolistPropsType = {
@@ -34,10 +34,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const onCompletedClickHandler = useCallback(() => dispatch(changeTodolistFilterAC(todolistId, 'completed')), [dispatch, todolistId]);
 
   const deleteUnnecessaryTodolsit = useCallback(() => {
-    dispatch(removeTodolistAC(todolistId));
+    dispatch(removeTodolist(todolistId));
   }, [dispatch, todolistId]);
   const replaceNewTitleTodolsit = useCallback((newTitle: string) => {
-    dispatch(changeTodolistTitleAC(todolistId, newTitle));
+    dispatch(changeTodolistTitle(todolistId, newTitle));
   }, [dispatch, todolistId]);
  
 

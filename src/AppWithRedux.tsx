@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { AddItemForm } from './components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist';
-import { addTodolistAC, TodolistDomainType, fetchTodolist } from './state/todolist-reducer';
+import { addTodolist, TodolistDomainType, fetchTodolist } from './state/todolist-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
 import { useCallback } from 'react';
@@ -25,8 +25,8 @@ export const AppWithRedux: React.FC = React.memo(() => {
   const todolists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolist);
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.task);
 
-  const addTodolist = useCallback((title: string) => {
-    dispatch( addTodolistAC(title));
+  const addNewTodolist = useCallback((title: string) => {
+    dispatch(addTodolist(title));
   }, [dispatch]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const AppWithRedux: React.FC = React.memo(() => {
       </AppBar>
       <Container>
         <Grid container style={{ padding: '20px 0px' }}>
-          <AddItemForm addItem={addTodolist} />
+          <AddItemForm addItem={addNewTodolist} />
         </Grid>
         <Grid container spacing={7}>
           {todolists.map(tl => {
