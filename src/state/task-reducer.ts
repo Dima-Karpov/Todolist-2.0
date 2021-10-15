@@ -75,22 +75,30 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
     try{
         // status
-        await todolistApi.deletTask(todolistId, id)
-        dispatch(removeTaskAC(todolistId, id))
+        await todolistApi.deletTask(todolistId, id);
+        dispatch(removeTaskAC(todolistId, id));
         // status
     } catch{
 
     }
-}
+};
 export const addTask = (todolistId: string, title: string) => async (dispatch: ThunkDispatch) => {
     try{
         //status
         const res = await todolistApi.addTask(todolistId, title);
-        dispatch(addTaskAC(res.data.data.item))
-        console.log(res.data.data.item)
+        dispatch(addTaskAC(res.data.data.item));
+        console.log(res.data.data.item);
         // status
     } catch{
 
+    }
+};
+
+export const updateTask = (todolistId: string, taskId: string) => async (dispatch: ThunkDispatch) => {
+    try{
+
+    } catch{
+        
     }
 }
 
