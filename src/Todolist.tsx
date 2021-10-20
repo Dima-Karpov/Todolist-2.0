@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
 import { Task } from './Task'
 
-import { changeTitleAC, changeStatusAC, deletTask, addTask } from "./state/task-reducer";
+import { changeTitleAC, changeStatusAC, deletTask, addTask, updateTask } from "./state/task-reducer";
 import { changeTodolistFilterAC, removeTodolist, changeTodolistTitle, FilterValuesType } from "./state/todolist-reducer";
 import { TaskStatuses, TaskType } from "./dal/todolists-api";
 
@@ -46,11 +46,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     dispatch(deletTask(todolistId, id))
   }, [dispatch]);
 
-  const onChangeTitleHandler = useCallback((id: string, newValue: string, todolistId: string) =>
-    dispatch(changeTitleAC(id, newValue, todolistId)), [dispatch]);
+  const onChangeTitleHandler = useCallback((todolistId: string, taskId: string, newTitle: string) =>
+    dispatch(updateTask(todolistId, taskId, {title: newTitle})), [dispatch]);
 
-  const onChangeStatusHandler = useCallback((id: string, status: TaskStatuses, todolistId: string) =>
-    dispatch(changeStatusAC(id, {status}, todolistId)), [dispatch]);
+  const onChangeStatusHandler = useCallback((todolistId: string, taskId: string, status: TaskStatuses) =>
+    dispatch(updateTask(todolistId, taskId, {status})), [dispatch]);
 
   const addTasks = useCallback((todolistId: string, title: string) => {
     dispatch(addTask(todolistId, title))

@@ -11,21 +11,21 @@ type TaskPropsType = {
   task: TaskType
   todolistId: string
 
-  removeTask: (todolistId: string, id: string ) => void
-  onChangeTitleHandler: (id: string, newValue: string, todolistId: string) => void
-  onChangeStatusHandler: (id: string, status: TaskStatuses, todolistId: string) => void
+  removeTask: (todolistId: string, id: string) => void
+  onChangeTitleHandler: (todolistId: string, id: string, title: string) => void
+  onChangeStatusHandler: (todolistId: string, id: string, status: TaskStatuses) => void
 }
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
   const { task, todolistId, removeTask, onChangeTitleHandler, onChangeStatusHandler } = props
 
-  const deletingUnnecessaryTask = useCallback(() => {removeTask(todolistId, task.id)}, [removeTask, task.id, todolistId]);
-  
+  const deletingUnnecessaryTask = useCallback(() => { removeTask(todolistId, task.id) }, [removeTask, task.id, todolistId]);
+
   const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked;
-    onChangeStatusHandler(task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, todolistId)
+    onChangeStatusHandler(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New)
   }, [onChangeStatusHandler, task.id, todolistId]);
 
-  const onChangeTaskTitle = useCallback((newValue: string) => {onChangeTitleHandler(task.id, newValue, todolistId)}, [onChangeTitleHandler, task.id, todolistId]);
+  const onChangeTaskTitle = useCallback((newValue: string) => { onChangeTitleHandler(todolistId, task.id, newValue) }, [onChangeTitleHandler, task.id, todolistId]);
 
   return (
     <div className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>

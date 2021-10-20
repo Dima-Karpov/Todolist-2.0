@@ -23,7 +23,7 @@ export const AppWithRedux: React.FC = React.memo(() => {
 
   const dispatch = useDispatch();
   const todolists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolist);
-  const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.task);
+  const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
 
   const addNewTodolist = useCallback((title: string) => {
     dispatch(addTodolist(title));
