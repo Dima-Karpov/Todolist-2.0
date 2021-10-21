@@ -13,13 +13,13 @@ export const todolistApi = {
         return instance.get<TodolistType[]>('todo-lists')
     },
     createTodo(title: string) {
-    return instance.post<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>('todo-lists', {title})
+        return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>('todo-lists', { title })
     },
     deletTodo(todolistId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
     },
     updateTodo(todoListId: string, title: string) {
-        return instance.put<{title: string}, AxiosResponse<CommonResponseType<{item: TodolistType}>>>(`todo-lists/${todoListId}`, { title })
+        return instance.put<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>(`todo-lists/${todoListId}`, { title })
     },
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
@@ -31,7 +31,7 @@ export const todolistApi = {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        return instance.put< {},
+        return instance.put<{},
             AxiosResponse<CommonResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     }
 };

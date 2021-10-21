@@ -39,7 +39,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const replaceNewTitleTodolsit = useCallback((newTitle: string) => {
     dispatch(changeTodolistTitle(todolistId, newTitle));
   }, [dispatch, todolistId]);
- 
+
 
 
   const removeTask = useCallback((todolistId: string, id: string) => {
@@ -47,10 +47,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   }, [dispatch]);
 
   const onChangeTitleHandler = useCallback((todolistId: string, taskId: string, newTitle: string) =>
-    dispatch(updateTask(todolistId, taskId, {title: newTitle})), [dispatch]);
+    dispatch(updateTask(todolistId, taskId, { title: newTitle })), [dispatch]);
 
   const onChangeStatusHandler = useCallback((todolistId: string, taskId: string, status: TaskStatuses) =>
-    dispatch(updateTask(todolistId, taskId, {status})), [dispatch]);
+    dispatch(updateTask(todolistId, taskId, { status })), [dispatch]);
 
   const addTasks = useCallback((todolistId: string, title: string) => {
     dispatch(addTask(todolistId, title))
@@ -61,7 +61,8 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   }, [addTasks, todolistId]);
 
   const getTasksForTodoList = useCallback(() => {
-    switch (filter) {
+    switch (filter)
+    {
       case 'completed':
         return tasks.filter(t => t.status === TaskStatuses.New)
       case 'active':
