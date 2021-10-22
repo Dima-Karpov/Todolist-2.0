@@ -184,7 +184,7 @@ export const AddTask = () => {
     const createTask = () => {
         todolistApi.addTask(todolistId, title)
             .then((res: any) => {
-                F(res.data);
+                setStateTasks(res.data);
                 alert(`Tasks was born on title: ${title}`);
             })
             .catch(e => alert(e))
