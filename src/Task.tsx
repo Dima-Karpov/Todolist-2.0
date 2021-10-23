@@ -14,7 +14,8 @@ type TaskPropsType = {
   removeTask: (todolistId: string, id: string) => void
   onChangeTitleHandler: (todolistId: string, id: string, title: string) => void
   onChangeStatusHandler: (todolistId: string, id: string, status: TaskStatuses) => void
-}
+};
+
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
   const { task, todolistId, removeTask, onChangeTitleHandler, onChangeStatusHandler } = props
 
