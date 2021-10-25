@@ -20,12 +20,7 @@ type TodolistPropsType = {
 };
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
-  const {
-    title,
-    todolistId,
-    filter,
-    tasks,
-  } = props;
+  const {title, todolistId, filter, tasks, } = props;
 
   const dispatch = useDispatch();
 
