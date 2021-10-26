@@ -15,7 +15,6 @@ type TodolistPropsType = {
   todolistId: string
   title: string
   filter: FilterValuesType
-
   tasks: TaskType[]
 };
 
