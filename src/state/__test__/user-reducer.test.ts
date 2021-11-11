@@ -1,4 +1,4 @@
-import { StateType, userReducer, incrementAge, incrementChildrenCount, changeName } from './user-reducer';
+import { StateType, userReducer, incrementAge, incrementChildrenCount, changeName } from '../user-reducer';
 
 
 test.skip('user reducer should icrement only age', () => {

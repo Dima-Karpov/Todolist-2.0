@@ -29,11 +29,8 @@ export const taskReducer = (state: TasksStateType = initialState, action: Action
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.id ? { ...t, ...action.model } : t)
             }
-        case 'TODOLIST/ADD-TODOLIST': {
-            const stateCopy = { ...state };
-            stateCopy[action.todolist.id] = [];
-            return stateCopy
-        }
+        case 'TODOLIST/ADD-TODOLIST':
+            return { ...state, [action.todolist.id]: [] }
         case 'TODOLIST/REMOVE-TODOLIST': {
             const stateCopy = { ...state };
             delete stateCopy[action.id];
@@ -46,20 +43,18 @@ export const taskReducer = (state: TasksStateType = initialState, action: Action
             })
             return copyState
         }
-        case 'TASK/SET-TASKS': {
-            const stateCopy = { ...state }
-            stateCopy[action.todolistId] = action.tasks
-            return stateCopy
-        }
+        case 'TASK/SET-TASKS':
+            return { ...state, [action.todolistId]: action.tasks }
         default:
             return state
     }
-
 };
 
 // action
-export const removeTaskAC = (todolistId: string, id: string) => ({ type: 'TASK/REMOVE-TASK', todolistId, id } as const);
-export const addTaskAC = (task: TaskType) => ({ type: 'TASK/ADD-TASK', task } as const);
+export const removeTaskAC = (todolistId: string, id: string) =>
+    ({ type: 'TASK/REMOVE-TASK', todolistId, id } as const);
+export const addTaskAC = (task: TaskType) =>
+    ({ type: 'TASK/ADD-TASK', task } as const);
 export const changeStatusAC = (id: string, model: UpdateDomainTaskModelType, todolistId: string) =>
     ({ type: 'TASK/CHANGE-TASK-STATUS', id, model, todolistId } as const);
 export const changeTitleAC = (id: string, title: string, todolistId: string) =>
@@ -69,7 +64,6 @@ export const updateTaskAC = (todolistId: string, id: string, model: UpdateDomain
     ({ type: 'TASK/UPDATE-TASK', todolistId, id, model } as const);
 
 // thunk
-
 export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch) => {
     try
     {
@@ -82,7 +76,7 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
     {
 
     }
-}
+};
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
     try
     {
@@ -105,8 +99,6 @@ export const addTask = (todolistId: string, title: string) => async (dispatch: T
 
     }
 };
-
-
 export const updateTask = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
     async (dispatch: ThunkDispatch, getState: () => AppRootStateType) => {
         try
@@ -135,7 +127,6 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
 
         }
     };
-
 
 
 type ActionsType =

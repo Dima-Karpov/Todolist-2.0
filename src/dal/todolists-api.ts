@@ -6,7 +6,7 @@ export const instance = axios.create({
     headers: {
         'API-KEY': '9e8978ae-0246-4c6d-84c4-bc28bfa5ba72',
     },
-})
+});
 
 export const todolistApi = {
     getTodo() {
@@ -16,24 +16,24 @@ export const todolistApi = {
         return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>('todo-lists', { title })
     },
     deletTodo(todolistId: string) {
-        return instance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
+        return instance.delete<CommonResponseType>(`todo-lists/${ todolistId }`)
     },
     updateTodo(todoListId: string, title: string) {
-        return instance.put<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>(`todo-lists/${todoListId}`, { title })
+        return instance.put<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>(`todo-lists/${ todoListId }`, { title })
     },
     getTasks(todolistId: string) {
-        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
+        return instance.get<GetTasksResponse>(`todo-lists/${ todolistId }/tasks`)
     },
     addTask(todolistId: string, title: string) {
-        return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TaskType }>>>(`todo-lists/${ todolistId }/tasks`, { title })
     },
     deletTask(todolistId: string, taskId: string) {
-        return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<CommonResponseType>(`todo-lists/${ todolistId }/tasks/${ taskId }`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<{},
-            AxiosResponse<CommonResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
-    }
+            AxiosResponse<CommonResponseType<TaskType>>>(`todo-lists/${ todolistId }/tasks/${ taskId }`, model)
+    },
 };
 
 

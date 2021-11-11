@@ -36,11 +36,16 @@ export const todolistReducer = (state: TodolistDomainType[] = initialState, acti
 
 
 // action
-export const removeTodolistAC = (id: string) => ({ type: 'TODOLIST/REMOVE-TODOLIST', id } as const);
-export const addTodolistAC = (todolist: TodolistType) => ({ type: 'TODOLIST/ADD-TODOLIST', todolist } as const);
-export const changeTodolistTitleAC = (id: string, title: string) => ({ type: 'TODOLIST/CHANGE-TODOLIST-TITLE', id, title } as const);
-export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) => ({ type: 'TODOLIST/CHANGE-TODOLIST-FILTER', id, filter } as const);
-export const setTodolists = (todolist: TodolistType[]) => ({ type: 'TODOLIST/SET-TODOLISTS', todolist } as const);
+export const removeTodolistAC = (id: string) =>
+    ({ type: 'TODOLIST/REMOVE-TODOLIST', id } as const);
+export const addTodolistAC = (todolist: TodolistType) =>
+    ({ type: 'TODOLIST/ADD-TODOLIST', todolist } as const);
+export const changeTodolistTitleAC = (id: string, title: string) =>
+    ({ type: 'TODOLIST/CHANGE-TODOLIST-TITLE', id, title } as const);
+export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) =>
+    ({ type: 'TODOLIST/CHANGE-TODOLIST-FILTER', id, filter } as const);
+export const setTodolists = (todolist: TodolistType[]) =>
+    ({ type: 'TODOLIST/SET-TODOLISTS', todolist } as const);
 
 // thunk
 export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
@@ -69,7 +74,6 @@ export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDisp
 
     }
 };
-
 export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) => {
     try
     {
@@ -82,7 +86,6 @@ export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) =>
 
     }
 };
-
 export const changeTodolistTitle = (todolistId: string, title: string) => async (dispatch: ThunkDispatch) => {
     try
     {
@@ -95,8 +98,6 @@ export const changeTodolistTitle = (todolistId: string, title: string) => async 
 
     }
 }
-
-
 
 export type AddTodolistAT = | ReturnType<typeof addTodolistAC>
 export type RemoveTodolistAT = | ReturnType<typeof removeTodolistAC>

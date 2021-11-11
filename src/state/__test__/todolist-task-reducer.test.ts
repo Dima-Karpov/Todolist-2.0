@@ -1,5 +1,5 @@
-import { addTodolistAC, todolistReducer, removeTodolistAC } from "./todolist-reducer";
-import { taskReducer } from "./task-reducer";
+import { addTodolistAC, todolistReducer, removeTodolistAC } from "../todolist-reducer";
+import { taskReducer } from "../task-reducer";
 
 
 // test('ids should be equals', () => {

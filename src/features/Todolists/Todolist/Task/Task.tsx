@@ -1,10 +1,11 @@
 import React, { ChangeEvent, useCallback } from "react";
-import { EditableSpan } from "./components/EditableSpan/EditableSpan";
+import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
+import { TaskStatuses, TaskType } from "../../../../dal/todolists-api";
+
 import Checkbox from '@mui/material/Checkbox';
 import { pink } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TaskStatuses, TaskType } from "./dal/todolists-api";
 
 
 type TaskPropsType = {
@@ -39,9 +40,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
             color: pink[600],
           },
         }} />
-
       <EditableSpan title={task.title} onChange={onChangeTaskTitle} />
-
       <IconButton color={'success'} size="small" onClick={deletingUnnecessaryTask}>
         <DeleteIcon fontSize="inherit" />
       </IconButton>
