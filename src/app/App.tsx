@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 export const App: React.FC = () => {
@@ -29,9 +30,10 @@ export const App: React.FC = () => {
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
+        <LinearProgress  />
       </AppBar>
       <Container>
-          <TodolistList />
+        <TodolistList />
       </Container>
     </ >
   );
