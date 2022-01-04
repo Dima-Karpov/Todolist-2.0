@@ -1,5 +1,6 @@
 import React from 'react';
-import { TodolistList } from '../features/Todolists/TodolistList';
+import {TodolistList} from '../features/Todolists/TodolistList';
+import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,22 +16,23 @@ export const App: React.FC = () => {
   return (
     <>
       <AppBar position="static">
-        <Toolbar style={ { justifyContent: 'space-between' } }>
+        <Snackbars />
+        <Toolbar style={{justifyContent: 'space-between'}}>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={ { mr: 2 } }
+            sx={{mr: 2}}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={ { flexGrow: 1 } }>
+          <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
             Todolist
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
-        <LinearProgress  />
+        <LinearProgress />
       </AppBar>
       <Container>
         <TodolistList />
