@@ -1,10 +1,7 @@
 import {Dispatch} from 'react';
 import {TaskPriorities, TaskStatuses, TaskType, todolistApi} from '../dal/todolists-api';
 
-type InitialStateType = {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed',
-  error: string | null,
-};
+
 
 const initialState: InitialStateType = {
   status: 'idle',
@@ -43,7 +40,10 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
   }
 };
 
-
+type InitialStateType = {
+  status: 'idle' | 'loading' | 'succeeded' | 'failed',
+  error: string | null,
+};
 
 type ActionsType = any
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import { v1 } from 'uuid';
+import {appReducer} from '../../state/app-reducer';
 import { taskReducer } from '../../state/task-reducer';
 import { todolistReducer } from '../../state/todolist-reducer';
 
@@ -19,14 +20,21 @@ type TodoListType = {
 type TaskStateType = {
     [key: string]: TaskType[]
 };
+
+type AppStateType = {
+    status: 'idle' | 'loading' | 'succeeded' | 'failed',
+    error: string | null,
+};
 type AppRootStateType = {
-    todolists: Array<TodoListType>
-    tasks: TaskStateType
-}
+    todolists: Array<TodoListType>;
+    tasks: TaskStateType;
+    app: AppStateType;
+};
 
 const rootReducer = combineReducers({
     tasks: taskReducer,
-    todolists: todolistReducer
+    todolists: todolistReducer,
+    app: appReducer,
 })
 
 const initialGlobalState: AppRootStateType = {
@@ -45,7 +53,11 @@ const initialGlobalState: AppRootStateType = {
             { id: v1(), title: 'CSS', isDone: true },
             { id: v1(), title: 'React', isDone: false },
         ]
-    }
+    },
+    app: {
+        error: null,
+        status: 'idle'
+    },
 };
 //@ts-ignore
 export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType);
