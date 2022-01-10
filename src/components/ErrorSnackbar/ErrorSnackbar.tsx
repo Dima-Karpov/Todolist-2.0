@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
+
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {AppRootStateType} from '../../state/store';
+
+import {setError} from '../../state/app-reducer';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -15,18 +18,21 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export const Snackbars = () => {
   const error = useSelector<AppRootStateType, string | null>(state => state.app.error);
-  
+  const dispatch = useDispatch();
+
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+    if (reason === 'clickaway')
+    {
       return;
     }
+    dispatch(setError(null))
   };
 
   const isOpen = error !== null;
 
   return (
     <Stack spacing={2} sx={{width: '100%'}}>
-      <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
           {error}
         </Alert>

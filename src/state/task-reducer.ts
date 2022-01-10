@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import { TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType } from '../dal/todolists-api';
+import {setError, SetErrorType} from './app-reducer';
 import { AppRootStateType } from './store';
 import { AddTodolistAT, RemoveTodolistAT, SetTodolistasAT } from "./todolist-reducer";
 
@@ -88,12 +89,17 @@ export const deletTask = (todolistId: string, id: string) => async (dispatch: Th
 
     }
 };
-export const addTask = (todolistId: string, title: string) => async (dispatch: ThunkDispatch) => {
-    try
-    {
+export const addTask = (todolistId: string, title: string) => async (dispatch: Dispatch<ActionsType | SetErrorType> ) => {
+    try {
         //status
         const res = await todolistApi.addTask(todolistId, title);
-        dispatch(addTaskAC(res.data.data.item));
+        if(res.data.resultCode === 0) {
+            dispatch(addTaskAC(res.data.data.item));
+        } else {
+            if (res.data.messages.length) {
+                dispatch(setError(res.data.messages[0]))
+            }
+        }
         // status
     } catch {
 
@@ -152,4 +158,4 @@ export type UpdateDomainTaskModelType = {
     deadline?: string
 };
 
-type ThunkDispatch = Dispatch<ActionsType>
+type ThunkDispatch = Dispatch<ActionsType> 

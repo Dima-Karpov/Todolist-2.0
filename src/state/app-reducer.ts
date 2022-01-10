@@ -1,5 +1,5 @@
 import {Dispatch} from 'react';
-import {TaskPriorities, TaskStatuses, TaskType, todolistApi} from '../dal/todolists-api';
+import { todolistApi} from '../dal/todolists-api';
 
 
 
@@ -10,8 +10,7 @@ const initialState: InitialStateType = {
 
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-  switch (action.type)
-  {
+  switch (action.type) {
     case 'APP/SET-STATUS':
       return {...state, status: action.status};
     case 'APP/SET-ERROR':
@@ -22,8 +21,11 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 };
 
 // action
-export const removeTaskAC = (todolistId: string, id: string) =>
-  ({type: 'TASK/REMOVE-TASK', todolistId, id} as const);
+export const setError = (error: string | null) =>
+  ({type: 'APP/SET-ERROR', error} as const);
+export const setStatus = (status: RequestStatusType) =>  
+  ({type: 'APP/SET-STATUS', status} as const);
+
 
 
 // thunk
@@ -41,10 +43,14 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
 };
 
 type InitialStateType = {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed',
+  status: RequestStatusType,
   error: string | null,
 };
 
-type ActionsType = any
+export type SetErrorType = ReturnType<typeof setStatus>
+
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+type ActionsType = ReturnType<typeof setError> | SetErrorType 
 
 type ThunkDispatch = Dispatch<ActionsType>
