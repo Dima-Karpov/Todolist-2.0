@@ -10,9 +10,14 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
+import {AppRootStateType} from '../state/store';
+import {useSelector} from 'react-redux';
+import {RequestStatusType} from '../state/app-reducer';
 
 
 export const App: React.FC = () => {
+  const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
+
   return (
     <>
       <AppBar position="static">
@@ -32,7 +37,7 @@ export const App: React.FC = () => {
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
-        <LinearProgress />
+        {status === 'loading' ? <LinearProgress /> : <></>}
       </AppBar>
       <Container>
         <TodolistList />

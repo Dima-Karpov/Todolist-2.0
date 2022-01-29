@@ -29,7 +29,7 @@ export const setStatus = (status: RequestStatusType) =>
 
 
 // thunk
-export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch) => {
+export const fetchTasks = (todolistId: string) => async (dispatch: AppThunkDispatch) => {
   try
   {
     // status
@@ -47,10 +47,11 @@ type InitialStateType = {
   error: string | null,
 };
 
-export type SetErrorType = ReturnType<typeof setStatus>
+export type SetErrorType = ReturnType<typeof setError>
+export type SetStatusType = ReturnType<typeof setStatus>
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
 
-type ActionsType = ReturnType<typeof setError> | SetErrorType 
+type ActionsType = SetStatusType | SetErrorType 
 
-type ThunkDispatch = Dispatch<ActionsType>
+export type AppThunkDispatch = Dispatch<ActionsType>
