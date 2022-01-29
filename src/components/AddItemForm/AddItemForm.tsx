@@ -1,14 +1,15 @@
-import React, { ChangeEvent, useCallback, useState, KeyboardEvent } from "react";
+import React, {ChangeEvent, useCallback, useState, KeyboardEvent} from "react";
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import ControlPoint from "@mui/icons-material/ControlPoint";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
-    const { addItem, } = props;
+    const {addItem, disabled, } = props;
 
     const [newTaskTitle, setNewTaskTitle] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
@@ -18,19 +19,23 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     };
 
     const addNewItem = useCallback(() => {
-        if (newTaskTitle.trim() !== '') {
+        if (newTaskTitle.trim() !== '')
+        {
             addItem(newTaskTitle.trim());
             setNewTaskTitle('');
-        } else {
+        } else
+        {
             setError('Title is requared')
         }
     }, [addItem, newTaskTitle]);
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (error !== null) {
+        if (error !== null)
+        {
             setError(null);
         }
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter')
+        {
             addNewItem();
         }
     };
@@ -48,9 +53,15 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
                 variant={'outlined'}
                 helperText={error}
                 onBlur={blurHandler}
+                disabled={disabled}
             />
 
-            <IconButton onClick={addNewItem} color={'primary'} onBlur={blurHandler}>
+            <IconButton
+                onClick={addNewItem}
+                color={'primary'}
+                onBlur={blurHandler}
+                disabled={disabled}
+            >
                 <ControlPoint />
             </IconButton>
 
