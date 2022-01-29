@@ -1,6 +1,6 @@
 import {Dispatch} from 'react';
 import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../dal/todolists-api';
-import {AppThunkDispatch, setError, SetErrorType, setStatus, SetStatusType} from './app-reducer';
+import {setAppError, SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
 import {AppRootStateType} from './store';
 import {AddTodolistAT, RemoveTodolistAT, SetTodolistasAT} from "./todolist-reducer";
 
@@ -68,11 +68,11 @@ export const updateTaskAC = (todolistId: string, id: string, model: UpdateDomain
 // thunk
 export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch) => {
         try {
-            dispatch(setStatus('loading'))
+            dispatch(setAppStatus('loading'))
             const res = await todolistApi.getTasks(todolistId);
             const tasks = res.data.items;
             dispatch(setTasks(todolistId, tasks));
-            dispatch(setStatus('succeeded'))
+            dispatch(setAppStatus('succeeded'))
         } catch (e: any)
         {
 
@@ -81,10 +81,10 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
         try
         {
-            dispatch(setStatus('loading'))
+            dispatch(setAppStatus('loading'))
             await todolistApi.deletTask(todolistId, id);
             dispatch(removeTaskAC(todolistId, id));
-            dispatch(setStatus('succeeded'))
+            dispatch(setAppStatus('succeeded'))
         } catch {
 
         }
@@ -93,7 +93,7 @@ export const addTask = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
         try
         {
-            dispatch(setStatus('loading'))
+            dispatch(setAppStatus('loading'))
             const res = await todolistApi.addTask(todolistId, title);
             if (res.data.resultCode === 0)
             {
@@ -102,13 +102,13 @@ export const addTask = (todolistId: string, title: string) =>
             {
                 if (res.data.messages.length)
                 {
-                    dispatch(setError(res.data.messages[0]))
+                    dispatch(setAppError(res.data.messages[0]))
                 } else
                 {
-                    dispatch(setError('Some error occurred'))
+                    dispatch(setAppError('Some error occurred'))
                 }
             }
-            dispatch(setStatus('succeeded'))
+            dispatch(setAppStatus('succeeded'))
         } catch {
 
         }
@@ -119,7 +119,7 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
         getState: () => AppRootStateType) => {
         try
         {
-            dispatch(setStatus('loading'))
+            dispatch(setAppStatus('loading'))
             const state = getState();
             const task = state.tasks[todolistId].find(t => t.id === taskId);
             if (!task)
@@ -138,7 +138,7 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
             };
             await todolistApi.updateTask(todolistId, taskId, apiModel);
             dispatch(updateTaskAC(todolistId, taskId, domainModel));
-            dispatch(setStatus('succeeded'))
+            dispatch(setAppStatus('succeeded'))
         } catch {
 
         }
