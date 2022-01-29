@@ -48,6 +48,8 @@ export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) =>
     ({type: 'TODOLIST/CHANGE-TODOLIST-FILTER', id, filter} as const);
 export const setTodolists = (todolist: TodolistType[]) =>
     ({type: 'TODOLIST/SET-TODOLISTS', todolist} as const);
+export const changeTodolistEntityStatus = (id: string, status: RequestStatusType) =>
+    ({type: 'TODOLIST/CHANGE-TODOLIST-ENTITY-STATUS', id, status} as const);
 
 // thunk
 export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
@@ -110,6 +112,7 @@ type ActionsType =
     | AddTodolistAT
     | ReturnType<typeof changeTodolistTitleAC>
     | ReturnType<typeof changeTodolistFilterAC>
+    | ReturnType<typeof changeTodolistEntityStatus>
     | SetTodolistasAT
 
 type ThunkDispatch = Dispatch<ActionsType | SetErrorType | SetStatusType>
