@@ -15,9 +15,7 @@ export type TodolistDomainType = TodolistType & {
 
 const initialState: TodolistDomainType[] = [];
 
-export const todolistReducer = (
-    state: TodolistDomainType[] = initialState, 
-    action: ActionsType): TodolistDomainType[] => {
+export const todolistReducer = (state: TodolistDomainType[] = initialState, action: ActionsType): TodolistDomainType[] => {
     switch (action.type)
     {
         case 'TODOLIST/REMOVE-TODOLIST':
@@ -37,7 +35,6 @@ export const todolistReducer = (
         default:
             return state
     }
-
 };
 
 
@@ -74,7 +71,7 @@ export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDisp
     try
     {
         dispatch(setAppStatus('loading'));
-        dispatch(changeTodolistEntityStatus(todoListId, 'loading'));
+        dispatch(changeTodolistEntityStatus(todoListId, 'loading'))
         await todolistApi.deletTodo(todoListId);
         dispatch(removeTodolistAC(todoListId));
         dispatch(setAppStatus('succeeded'));

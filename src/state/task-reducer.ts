@@ -109,8 +109,9 @@ export const addTask = (todolistId: string, title: string) =>
                 }
             }
             dispatch(setAppStatus('succeeded'))
-        } catch {
-
+        } catch (error: ErrorType) {
+            dispatch(setAppError(error.message))
+            dispatch(setAppStatus('failed'))
         }
     };
 export const updateTask = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
@@ -169,3 +170,13 @@ export type UpdateDomainTaskModelType = {
 };
 
 type ThunkDispatch = Dispatch<ActionsType | SetErrorType | SetStatusType>
+
+export type ErrorType = {
+    config: any
+    isAxiosError: boolean
+    request: any
+    response: any
+    toJSON: any 
+    message: string
+    stack: string
+}
