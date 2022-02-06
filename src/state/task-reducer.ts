@@ -1,5 +1,6 @@
 import {Dispatch} from 'react';
 import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../dal/todolists-api';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 import {setAppError, SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
 import {AppRootStateType} from './store';
 import {AddTodolistAT, RemoveTodolistAT, SetTodolistasAT} from "./todolist-reducer";
@@ -73,9 +74,9 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
             const tasks = res.data.items;
             dispatch(setTasks(todolistId, tasks));
             dispatch(setAppStatus('succeeded'))
-        } catch (e: any)
+        } catch (error)
         {
-
+            handleServerNetworkError(error, dispatch);
         }
     };
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
@@ -85,33 +86,24 @@ export const deletTask = (todolistId: string, id: string) => async (dispatch: Th
             await todolistApi.deletTask(todolistId, id);
             dispatch(removeTaskAC(todolistId, id));
             dispatch(setAppStatus('succeeded'))
-        } catch {
-
+        } catch (error)
+        {
+            handleServerNetworkError(error, dispatch);
         }
     };
 export const addTask = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
-        try
-        {
+        try {
             dispatch(setAppStatus('loading'))
             const res = await todolistApi.addTask(todolistId, title);
-            if (res.data.resultCode === 0)
-            {
+            if (res.data.resultCode === 0) {
                 dispatch(addTaskAC(res.data.data.item));
-            } else
-            {
-                if (res.data.messages.length)
-                {
-                    dispatch(setAppError(res.data.messages[0]))
-                } else
-                {
-                    dispatch(setAppError('Some error occurred'))
-                }
+            } else {
+                handleServerAppError(res.data, dispatch);
             }
             dispatch(setAppStatus('succeeded'))
-        } catch (error: ErrorType) {
-            dispatch(setAppError(error.message))
-            dispatch(setAppStatus('failed'))
+        } catch (error) {
+            handleServerNetworkError(error, dispatch);
         }
     };
 export const updateTask = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
@@ -137,11 +129,15 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
                 deadline: task.deadline,
                 ...domainModel
             };
-            await todolistApi.updateTask(todolistId, taskId, apiModel);
-            dispatch(updateTaskAC(todolistId, taskId, domainModel));
+            const res =   await todolistApi.updateTask(todolistId, taskId, apiModel);
+            if (res.data.resultCode === 0){
+                dispatch(updateTaskAC(todolistId, taskId, apiModel));
+            } else {
+                handleServerAppError(res.data, dispatch);
+            }
             dispatch(setAppStatus('succeeded'))
-        } catch {
-
+        } catch (error) {
+            handleServerNetworkError(error, dispatch);
         }
     };
 

@@ -89,4 +89,5 @@ export type UpdateTaskModelType = {
     startDate: string
     deadline: string
 };
+
 export type RequestStatusType = 'loading' | 'idle' | 'succeeded' | 'failed';
