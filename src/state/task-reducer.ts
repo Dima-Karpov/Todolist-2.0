@@ -68,8 +68,8 @@ export const updateTaskAC = (todolistId: string, id: string, model: UpdateDomain
 
 // thunk
 export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch) => {
+    dispatch(setAppStatus('loading'))
         try {
-            dispatch(setAppStatus('loading'))
             const res = await todolistApi.getTasks(todolistId);
             const tasks = res.data.items;
             dispatch(setTasks(todolistId, tasks));
@@ -80,9 +80,9 @@ export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch
         }
     };
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
+    dispatch(setAppStatus('loading'))
         try
         {
-            dispatch(setAppStatus('loading'))
             await todolistApi.deletTask(todolistId, id);
             dispatch(removeTaskAC(todolistId, id));
             dispatch(setAppStatus('succeeded'))
@@ -93,8 +93,8 @@ export const deletTask = (todolistId: string, id: string) => async (dispatch: Th
     };
 export const addTask = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
+        dispatch(setAppStatus('loading'))
         try {
-            dispatch(setAppStatus('loading'))
             const res = await todolistApi.addTask(todolistId, title);
             if (res.data.resultCode === 0) {
                 dispatch(addTaskAC(res.data.data.item));
@@ -110,9 +110,9 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
     async (
         dispatch: ThunkDispatch,
         getState: () => AppRootStateType) => {
+            dispatch(setAppStatus('loading'))
         try
         {
-            dispatch(setAppStatus('loading'))
             const state = getState();
             const task = state.tasks[todolistId].find(t => t.id === taskId);
             if (!task)

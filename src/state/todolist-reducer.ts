@@ -1,6 +1,7 @@
 import {Dispatch} from 'react';
 import {v1} from 'uuid';
 import {todolistApi, TodolistType} from '../dal/todolists-api';
+import {handleServerNetworkError} from '../utils/error-utils';
 import {SetErrorType, setAppStatus, SetStatusType, RequestStatusType} from './app-reducer';
 import {fetchTasks} from './task-reducer';
 
@@ -62,9 +63,9 @@ export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
         res.data.forEach(tl => dispatch(fetchTasks(tl.id)));
         dispatch(setAppStatus('succeeded'));
         return res.data;
-    } catch (e: any)
+    } catch (error)
     {
-
+        handleServerNetworkError(error, dispatch);
     }
 };
 export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDispatch) => {
@@ -75,9 +76,9 @@ export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDisp
         await todolistApi.deletTodo(todoListId);
         dispatch(removeTodolistAC(todoListId));
         dispatch(setAppStatus('succeeded'));
-    } catch (e: any)
+    } catch (error)
     {
-
+        handleServerNetworkError(error, dispatch);
     }
 };
 export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) => {
@@ -87,9 +88,9 @@ export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) =>
         const res = await todolistApi.createTodo(title);
         dispatch(addTodolistAC(res.data.data.item))
         dispatch(setAppStatus('succeeded'));
-    } catch (e: any)
+    } catch (error)
     {
-
+        handleServerNetworkError(error, dispatch);
     }
 };
 export const changeTodolistTitle = (todolistId: string, title: string) =>
@@ -100,9 +101,9 @@ export const changeTodolistTitle = (todolistId: string, title: string) =>
             todolistApi.updateTodo(todolistId, title);
             dispatch(changeTodolistTitleAC(todolistId, title));
             dispatch(setAppStatus('succeeded'));
-        } catch (e: any)
+        } catch (error)
         {
-
+            handleServerNetworkError(error, dispatch);
         }
     }
 
