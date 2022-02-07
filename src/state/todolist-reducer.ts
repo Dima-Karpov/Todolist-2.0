@@ -1,7 +1,7 @@
 import {Dispatch} from 'react';
 import {v1} from 'uuid';
 import {todolistApi, TodolistType} from '../dal/todolists-api';
-import {handleServerNetworkError} from '../utils/error-utils';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 import {SetErrorType, setAppStatus, SetStatusType, RequestStatusType} from './app-reducer';
 import {fetchTasks} from './task-reducer';
 
@@ -66,6 +66,9 @@ export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
+    } finally
+    {
+        dispatch(setAppStatus('succeeded'));
     }
 };
 export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDispatch) => {
@@ -79,31 +82,55 @@ export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDisp
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
+        dispatch(setAppStatus('failed'));
+    } finally
+    {
+        dispatch(setAppStatus('succeeded'));
     }
 };
 export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) => {
+    dispatch(setAppStatus('loading'));
     try
     {
-        dispatch(setAppStatus('loading'));
         const res = await todolistApi.createTodo(title);
-        dispatch(addTodolistAC(res.data.data.item))
+        if (res.data.resultCode === 0)
+        {
+            dispatch(addTodolistAC(res.data.data.item))
+        } else
+        {
+            handleServerAppError(res.data, dispatch);
+        }
         dispatch(setAppStatus('succeeded'));
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
+        dispatch(setAppStatus('failed'));
+    } finally
+    {
+        dispatch(setAppStatus('succeeded'));
     }
 };
 export const changeTodolistTitle = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
+        dispatch(setAppStatus('loading'));
         try
         {
-            dispatch(setAppStatus('loading'));
-            todolistApi.updateTodo(todolistId, title);
-            dispatch(changeTodolistTitleAC(todolistId, title));
+            const res = await todolistApi.updateTodo(todolistId, title);
+            if (res.data.resultCode === 0)
+            {
+                dispatch(changeTodolistTitleAC(todolistId, title));
+            } else
+            {
+                handleServerAppError(res.data, dispatch);
+            }
             dispatch(setAppStatus('succeeded'));
         } catch (error)
         {
             handleServerNetworkError(error, dispatch);
+            dispatch(setAppStatus('failed'));
+        } finally
+        {
+            dispatch(setAppStatus('succeeded'));
         }
     }
 
