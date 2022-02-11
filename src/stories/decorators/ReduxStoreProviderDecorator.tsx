@@ -5,9 +5,9 @@ import { createStore, combineReducers } from 'redux';
 
 import { v1 } from 'uuid';
 import {TaskPriorities, TaskType, TaskStatuses} from '../../dal/todolists-api';
-import {appReducer} from '../../state/app-reducer';
-import { taskReducer } from '../../state/task-reducer';
-import { todolistReducer } from '../../state/todolist-reducer';
+import {appReducer} from '../../state/reducers/app-reducer';
+import { taskReducer } from '../../state/reducers/task-reducer';
+import { todolistReducer } from '../../state/reducers/todolist-reducer';
 
 
 type FilterValueTpe = 'all' | 'active' | 'completed';

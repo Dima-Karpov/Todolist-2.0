@@ -2,8 +2,8 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCallback} from 'react';
 import {AppRootStateType} from '../../state/store';
-import {addTodolist, fetchTodolist, TodolistDomainType} from '../../state/todolist-reducer';
-import {TasksStateType} from '../../state/task-reducer';
+import {addTodolist, fetchTodolist, TodolistDomainType} from '../../state/reducers/todolist-reducer';
+import {TasksStateType} from '../../state/reducers/task-reducer';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
 

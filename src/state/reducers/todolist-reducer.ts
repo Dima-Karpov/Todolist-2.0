@@ -1,7 +1,7 @@
 import {Dispatch} from 'react';
 import {v1} from 'uuid';
-import {todolistApi, TodolistType} from '../dal/todolists-api';
-import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
+import {todolistApi, TodolistType} from '../../dal/todolists-api';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {SetErrorType, setAppStatus, SetStatusType, RequestStatusType} from './app-reducer';
 import {fetchTasks} from './task-reducer';
 

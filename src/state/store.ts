@@ -1,8 +1,8 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import { todolistReducer } from './todolist-reducer';
-import { taskReducer } from './task-reducer';
+import { todolistReducer } from './reducers/todolist-reducer';
+import { taskReducer } from './reducers/task-reducer';
 import thunk from "redux-thunk";
-import {appReducer} from "./app-reducer";
+import {appReducer} from "./reducers/app-reducer";
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
 

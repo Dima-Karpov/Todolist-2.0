@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { todolistApi, UpdateTaskModelType } from '../dal/todolists-api';
+import { todolistApi, UpdateTaskModelType } from '../../dal/todolists-api';
 
 export default {
     title: 'API',

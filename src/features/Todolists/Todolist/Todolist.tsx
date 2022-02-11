@@ -4,13 +4,13 @@ import './index.css';
 import {useDispatch} from 'react-redux';
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {deletTask, addTask, updateTask} from "../../../state/task-reducer";
+import {deletTask, addTask, updateTask} from "../../../state/reducers/task-reducer";
 import {
   changeTodolistFilterAC,
   removeTodolist,
   changeTodolistTitle,
   TodolistDomainType
-} from "../../../state/todolist-reducer";
+} from "../../../state/reducers/todolist-reducer";
 import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
 import {Task} from "./Task/Task";
 

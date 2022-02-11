@@ -1,8 +1,8 @@
 import {Dispatch} from 'react';
-import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../dal/todolists-api';
-import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
+import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../../dal/todolists-api';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setAppError, SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
-import {AppRootStateType} from './store';
+import {AppRootStateType} from '../store';
 import {AddTodolistAT, RemoveTodolistAT, SetTodolistasAT} from "./todolist-reducer";
 
 const initialState: TasksStateType = {};

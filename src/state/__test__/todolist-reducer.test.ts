@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {RequestStatusType} from "../../dal/todolists-api";
-import {todolistReducer, TodolistDomainType} from "../todolist-reducer";
-import { changeTodolistEntityStatus } from './../todolist-reducer';
+import {todolistReducer, TodolistDomainType} from "../reducers/todolist-reducer";
+import { changeTodolistEntityStatus } from '../reducers/todolist-reducer';
 
 
 let todolistId1: string;

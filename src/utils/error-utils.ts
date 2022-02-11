@@ -1,4 +1,4 @@
-import {setAppError, setAppStatus, SetErrorType, SetStatusType} from '../state/app-reducer';
+import {setAppError, setAppStatus, SetErrorType, SetStatusType} from '../state/reducers/app-reducer';
 
 import {CommonResponseType} from '../dal/todolists-api';
 import { Dispatch } from 'react';

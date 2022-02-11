@@ -1,4 +1,4 @@
-import {appReducer, setError, setStatus} from './../app-reducer';
+import {appReducer, setError, setStatus} from '../reducers/app-reducer';
 
 type InitialStateType = {
   status: 'idle' | 'loading' | 'succeeded' | 'failed',

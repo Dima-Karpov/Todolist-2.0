@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
 import {AppRootStateType} from '../state/store';
 import {useSelector} from 'react-redux';
-import {RequestStatusType} from '../state/app-reducer';
+import {RequestStatusType} from '../state/reducers/app-reducer';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Todolists/Login/Login';
 
