@@ -1,7 +1,7 @@
 import {Dispatch} from 'react';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {setAppError, SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
-import {AppRootStateType} from '../store';
+import {SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
+import {authApi, LoginParamsType} from '../../dal/login-api';
 
 const initialState = {
 
@@ -22,14 +22,24 @@ export const loginReducer = (state: InitialStateType = initialState, action: Act
 //   ({type: 'TASK/REMOVE-TASK', todolistId, id} as const);
 
 // thunk
-export const fetchTasks = () => async (dispatch: ThunkDispatch) => {
+export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: ThunkDispatch) => {
   dispatch(setAppStatus('loading'))
-  try
-  {
+  try {
+    const result = await authApi.login(dataLogin)
+    if (result.data.resultCode === 0) {
+      console.log(result.data)
+      
+    } else {
+      handleServerAppError(result.data, dispatch);
+    }
+
+    dispatch(setAppStatus('succeeded'))
    
   } catch (error)
   {
     handleServerNetworkError(error, dispatch);
+  } finally {
+    dispatch(setAppStatus('failed'))
   }
 };
 

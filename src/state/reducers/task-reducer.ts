@@ -1,7 +1,7 @@
 import {Dispatch} from 'react';
 import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../../dal/todolists-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {setAppError, SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
+import {SetErrorType, setAppStatus, SetStatusType} from './app-reducer';
 import {AppRootStateType} from '../store';
 import {AddTodolistAT, RemoveTodolistAT, SetTodolistasAT} from "./todolist-reducer";
 
@@ -89,6 +89,9 @@ export const deletTask = (todolistId: string, id: string) => async (dispatch: Th
         } catch (error)
         {
             handleServerNetworkError(error, dispatch);
+        } finally
+        {
+            dispatch(setAppStatus('failed'))
         }
     };
 export const addTask = (todolistId: string, title: string) =>
@@ -104,6 +107,9 @@ export const addTask = (todolistId: string, title: string) =>
             dispatch(setAppStatus('succeeded'))
         } catch (error) {
             handleServerNetworkError(error, dispatch);
+        } finally
+        {
+            dispatch(setAppStatus('failed'))
         }
     };
 export const updateTask = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
@@ -138,6 +144,9 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
             dispatch(setAppStatus('succeeded'))
         } catch (error) {
             handleServerNetworkError(error, dispatch);
+        } finally
+        {
+            dispatch(setAppStatus('failed'))
         }
     };
 

@@ -8,17 +8,21 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from 'formik';
-import {getBottomNavigationActionUtilityClass} from '@mui/material';
+import {useDispatch} from 'react-redux';
+import {loginUser} from '../../../state/reducers/login-reducer';
 
 export const Login: React.FC = () => {
+  const dispatch = useDispatch()
   const {handleSubmit, getFieldProps, values, errors, } = useFormik({
     validate: (values) => {
-      if(!values.email) {
+      if (!values.email)
+      {
         return {
           email: 'Email is  required'
         }
       }
-      if(!values.password){
+      if (!values.password)
+      {
         return {
           password: 'Password is  required'
         }
@@ -30,7 +34,7 @@ export const Login: React.FC = () => {
       rememberMe: false
     },
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2))
+      dispatch(loginUser(values))
     },
   });
 
@@ -42,7 +46,9 @@ export const Login: React.FC = () => {
             <FormLabel>
               <p>To log in get registered
                 <a href={'https://social-network.samuraijs.com/'}
-                  target={'_blank'}> here
+                  target={'_blank'}
+                  rel="noreferrer"
+                > here
                 </a>
               </p>
               <p>or use common test account credentials:</p>
