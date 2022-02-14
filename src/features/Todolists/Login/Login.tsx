@@ -8,11 +8,15 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from 'formik';
-import {useDispatch} from 'react-redux';
-import {loginUser} from '../../../state/reducers/login-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUser} from '../../../state/reducers/auth-reducer';
+import {AppRootStateType} from '../../../state/store';
+import {Navigate} from 'react-router-dom';
 
 export const Login: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+
   const {handleSubmit, getFieldProps, values, errors, } = useFormik({
     validate: (values) => {
       if (!values.email)
@@ -21,8 +25,7 @@ export const Login: React.FC = () => {
           email: 'Email is  required'
         }
       }
-      if (!values.password)
-      {
+      if (!values.password) {
         return {
           password: 'Password is  required'
         }
@@ -37,6 +40,10 @@ export const Login: React.FC = () => {
       dispatch(loginUser(values))
     },
   });
+
+  if (isLoggedIn){
+    return <Navigate to={'/'}/>
+  };
 
   return (
     <Grid container justifyContent={'center'}>

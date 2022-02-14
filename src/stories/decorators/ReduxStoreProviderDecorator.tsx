@@ -1,6 +1,5 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-
 import { createStore, combineReducers } from 'redux';
 
 import { v1 } from 'uuid';
@@ -8,6 +7,7 @@ import {TaskPriorities, TaskType, TaskStatuses} from '../../dal/todolists-api';
 import {appReducer} from '../../state/reducers/app-reducer';
 import { taskReducer } from '../../state/reducers/task-reducer';
 import { todolistReducer } from '../../state/reducers/todolist-reducer';
+import { authReducer } from './../../state/reducers/auth-reducer';
 
 
 type FilterValueTpe = 'all' | 'active' | 'completed';
@@ -26,6 +26,7 @@ type StatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type AppStateType = {
     status: StatusType,
     error: string | null,
+    isInitialized: boolean,
 };
 type AppRootStateType = {
     todolists: Array<TodoListType>;
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     tasks: taskReducer,
     todolists: todolistReducer,
     app: appReducer,
+    auth: authReducer,
 })
 
 const initialGlobalState: AppRootStateType = {
@@ -65,8 +67,10 @@ const initialGlobalState: AppRootStateType = {
     },
     app: {
         error: null,
-        status: 'idle'
+        status: 'idle',
+        isInitialized: false
     },
+    
 };
 //@ts-ignore
 export const storyBookStore = createStore(

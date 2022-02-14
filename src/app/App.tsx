@@ -15,10 +15,30 @@ import {useSelector} from 'react-redux';
 import {RequestStatusType} from '../state/reducers/app-reducer';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Todolists/Login/Login';
+import {CircularProgressWithLabel} from '../features/Progress';
 
 
-export const App: React.FC = () => {
+export const App: React.FC = (): JSX.Element => {
   const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
+  const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized);
+  const [progress, setProgress] = React.useState(10);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+    }, 800);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  if (!isInitialized) {
+    return (
+    <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+      <CircularProgressWithLabel value={progress} />
+    </div>
+    )
+  };
 
   return (
     <>
@@ -44,10 +64,10 @@ export const App: React.FC = () => {
           {status === 'loading' ? <LinearProgress /> : <></>}
         </AppBar>
         <Container fixed>
-            <Routes>
-              <Route path={'/'} element={<TodolistList />} />
-              <Route path={'/login'} element={<Login />} />
-            </Routes>
+          <Routes>
+            <Route path={'/'} element={<TodolistList />} />
+            <Route path={'/login'} element={<Login />} />
+          </Routes>
         </Container>
       </BrowserRouter>
 
