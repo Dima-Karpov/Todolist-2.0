@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {TodolistList} from '../features/Todolists/TodolistList';
 import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
 
@@ -10,18 +10,22 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
+
 import {AppRootStateType} from '../state/store';
-import {useSelector} from 'react-redux';
-import {RequestStatusType} from '../state/reducers/app-reducer';
+import {useSelector, useDispatch} from 'react-redux';
+import {RequestStatusType, initializeApp} from '../state/reducers/app-reducer';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Todolists/Login/Login';
 import {CircularProgressWithLabel} from '../features/Progress';
+import {loguotUser} from '../state/reducers/auth-reducer';
 
 
 export const App: React.FC = (): JSX.Element => {
   const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
   const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized);
   const [progress, setProgress] = React.useState(10);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,11 +36,19 @@ export const App: React.FC = (): JSX.Element => {
     };
   }, []);
 
+  useEffect(() => {
+    dispatch(initializeApp())
+  }, []);
+
+  const logoutHandler = useCallback(() => {
+    dispatch(loguotUser());
+  }, []);
+
   if (!isInitialized) {
     return (
-    <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-      <CircularProgressWithLabel value={progress} />
-    </div>
+      <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+        <CircularProgressWithLabel value={progress} />
+      </div>
     )
   };
 
@@ -59,7 +71,7 @@ export const App: React.FC = (): JSX.Element => {
             <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
               Todolist
             </Typography>
-            <Button color="inherit">Login</Button>
+            {isLoggedIn &&  <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
           </Toolbar>
           {status === 'loading' ? <LinearProgress /> : <></>}
         </AppBar>

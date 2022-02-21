@@ -1,5 +1,7 @@
 import {Dispatch} from 'react';
+import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {IsLoggedInType, setIsLoggedIn} from './auth-reducer';
 
 
 const initialState: InitialStateType = {
@@ -31,25 +33,21 @@ export const setAppInitialized = (value: boolean) =>
 
 // thunk
 export const initializeApp = () => async (dispatch: AppThunkDispatch) => {
-    // dispatch(setAppStatus('loading'))
-    // try
-    // {
-    //   const result = 
-    //   if (result.data.resultCode === 0)
-    //   {
-        
-    //   } else
-    //   {
-    //     handleServerAppError(result.data, dispatch);
-    //   }
-    //   dispatch(setAppStatus('succeeded'))
-    // } catch (error)
-    // {
-    //   handleServerNetworkError(error, dispatch);
-    // } finally
-    // {
-    //   dispatch(setAppStatus('failed'))
-    // }
+    dispatch(setAppInitialized(false))
+    try
+    {
+      const result = await authApi.me()
+      if (result.data.resultCode === 0) {
+        dispatch(setIsLoggedIn(true));
+        dispatch(setAppInitialized(true));
+      } else {
+        handleServerAppError(result.data, dispatch);
+      }
+    } catch (error){
+      handleServerNetworkError(error, dispatch);
+    } finally{
+      dispatch(setAppInitialized(true));
+    }
   };
 
 type InitialStateType = {
@@ -65,4 +63,4 @@ export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 type ActionsType = SetStatusType | SetErrorType | ReturnType<typeof setAppInitialized>
 
-export type AppThunkDispatch = Dispatch<ActionsType>
+export type AppThunkDispatch = Dispatch<ActionsType | IsLoggedInType >

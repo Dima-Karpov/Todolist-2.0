@@ -31,7 +31,24 @@ export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: ThunkD
   try {
     const result = await authApi.login(dataLogin)
     if (result.data.resultCode === 0) {
-      setIsLoggedIn(true);
+      dispatch(setIsLoggedIn(true));
+    } else {
+      handleServerAppError(result.data, dispatch);
+    }
+    dispatch(setAppStatus('succeeded'));
+  } catch (error)
+  {
+    handleServerNetworkError(error, dispatch);
+  } finally {
+    dispatch(setAppStatus('failed'));
+  }
+};
+export const loguotUser = () => async (dispatch: ThunkDispatch) => {
+  dispatch(setAppStatus('loading'))
+  try {
+    const result = await authApi.logout()
+    if (result.data.resultCode === 0) {
+      dispatch(setIsLoggedIn(false));
     } else {
       handleServerAppError(result.data, dispatch);
     }
@@ -44,9 +61,8 @@ export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: ThunkD
   }
 };
 
-
-
-type ActionsType = ReturnType<typeof setIsLoggedIn>
+export type IsLoggedInType = ReturnType<typeof setIsLoggedIn> 
+type ActionsType = IsLoggedInType; 
 
 type ThunkDispatch = Dispatch<ActionsType | SetErrorType | SetStatusType>
 
