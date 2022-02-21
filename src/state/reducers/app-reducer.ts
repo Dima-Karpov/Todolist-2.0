@@ -30,8 +30,7 @@ export const setAppInitialized = (value: boolean) =>
   ({type: 'APP/SET-APP-INITIALIZED', value} as const);
 
 // thunk
-export const initializedApp = (todolistId: string, title: string) =>
-  async (dispatch: AppThunkDispatch) => {
+export const initializeApp = () => async (dispatch: AppThunkDispatch) => {
     // dispatch(setAppStatus('loading'))
     // try
     // {

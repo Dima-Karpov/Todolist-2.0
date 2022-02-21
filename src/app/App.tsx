@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TodolistList} from '../features/Todolists/TodolistList';
 import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
 
@@ -23,10 +23,10 @@ export const App: React.FC = (): JSX.Element => {
   const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized);
   const [progress, setProgress] = React.useState(10);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-    }, 800);
+    }, 500);
     return () => {
       clearInterval(timer);
     };
