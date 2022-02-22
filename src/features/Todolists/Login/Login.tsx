@@ -1,4 +1,11 @@
 import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Navigate} from 'react-router-dom';
+import {useFormik} from 'formik';
+
+import {AppRootStateType} from '../../../state/store';
+import {loginUser} from '../../../state/reducers/auth-reducer';
+
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
@@ -7,11 +14,6 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useFormik} from 'formik';
-import {useDispatch, useSelector} from 'react-redux';
-import {loginUser} from '../../../state/reducers/auth-reducer';
-import {AppRootStateType} from '../../../state/store';
-import {Navigate} from 'react-router-dom';
 
 export const Login: React.FC = () => {
   const dispatch = useDispatch();

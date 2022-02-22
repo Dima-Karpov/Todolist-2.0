@@ -2,8 +2,7 @@ import React, {useCallback} from 'react';
 import './index.css';
 
 import {useDispatch} from 'react-redux';
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
-import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+
 import {deletTask, addTask, updateTask} from "../../../state/reducers/task-reducer";
 import {
   changeTodolistFilterAC,
@@ -11,8 +10,12 @@ import {
   changeTodolistTitle,
   TodolistDomainType
 } from "../../../state/reducers/todolist-reducer";
-import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
+
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Task} from "./Task/Task";
+
+import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';

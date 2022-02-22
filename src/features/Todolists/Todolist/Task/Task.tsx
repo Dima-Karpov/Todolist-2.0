@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useCallback } from "react";
-import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
+
 import { TaskStatuses, TaskType } from "../../../../dal/todolists-api";
+
+import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
 
 import Checkbox from '@mui/material/Checkbox';
 import { pink } from '@mui/material/colors';

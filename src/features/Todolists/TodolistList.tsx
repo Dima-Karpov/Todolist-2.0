@@ -1,20 +1,18 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {useCallback} from 'react';
-import {AppRootStateType} from '../../state/store';
-
-import {addTodolist, fetchTodolist, TodolistDomainType} from '../../state/reducers/todolist-reducer';
-import {TasksStateType} from '../../state/reducers/task-reducer';
+import {Navigate} from 'react-router-dom';
 
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
 
-import {Navigate} from 'react-router-dom';
-
+import {AppRootStateType} from '../../state/store';
+import {addTodolist, fetchTodolist, TodolistDomainType} from '../../state/reducers/todolist-reducer';
+import {TasksStateType} from '../../state/reducers/task-reducer';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+
+
 
 type TodolistListPropsType = {}
 export const TodolistList: React.FC<TodolistListPropsType> = React.memo(props => {
