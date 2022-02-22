@@ -1,6 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {TodolistList} from '../features/Todolists/TodolistList';
 import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
+import {Login} from '../features/Todolists/Login/Login';
+import {CircularProgressWithLabel} from '../features/Progress';
+
+import {AppRootStateType} from '../state/store';
+import {loguotUser} from '../state/reducers/auth-reducer';
+import {RequestStatusType, initializeApp} from '../state/reducers/app-reducer';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,13 +20,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import {AppRootStateType} from '../state/store';
-import {useSelector, useDispatch} from 'react-redux';
-import {RequestStatusType, initializeApp} from '../state/reducers/app-reducer';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {Login} from '../features/Todolists/Login/Login';
-import {CircularProgressWithLabel} from '../features/Progress';
-import {loguotUser} from '../state/reducers/auth-reducer';
 
 
 export const App: React.FC = (): JSX.Element => {
@@ -86,8 +88,3 @@ export const App: React.FC = (): JSX.Element => {
     </>
   );
 };
-
-
-
-
-
