@@ -40,11 +40,11 @@ export const App: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(initializeApp())
-  }, []);
+  }, [dispatch]);
 
   const logoutHandler = useCallback(() => {
     dispatch(loguotUser());
-  }, []);
+  }, [dispatch]);
 
   if (!isInitialized) {
     return (
