@@ -38,7 +38,7 @@ export const initializeApp = () => async (dispatch: AppThunkDispatch) => {
     {
       const result = await authApi.me()
       if (result.data.resultCode === 0) {
-        dispatch(setIsLoggedIn(true));
+        dispatch(setIsLoggedIn({value: true}));
         dispatch(setAppInitialized(true));
       } else {
         handleServerAppError(result.data, dispatch);
