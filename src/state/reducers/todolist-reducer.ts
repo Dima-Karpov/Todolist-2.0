@@ -57,39 +57,39 @@ export const changeTodolistEntityStatus = (id: string, status: RequestStatusType
 export const fetchTodolist = () => async (dispatch: ThunkDispatch | any) => {
     try
     {
-        dispatch(setAppStatus('loading'));
+        dispatch(setAppStatus({status: 'loading'}));
         const res = await todolistApi.getTodo();
         dispatch(setTodolists(res.data));
         res.data.forEach(tl => dispatch(fetchTasks(tl.id)));
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
         return res.data;
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
     } finally
     {
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
     }
 };
 export const removeTodolist = (todoListId: string) => async (dispatch: ThunkDispatch) => {
     try
     {
-        dispatch(setAppStatus('loading'));
+        dispatch(setAppStatus({status: 'loading'}));
         dispatch(changeTodolistEntityStatus(todoListId, 'loading'))
         await todolistApi.deletTodo(todoListId);
         dispatch(removeTodolistAC(todoListId));
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
-        dispatch(setAppStatus('failed'));
+        dispatch(setAppStatus({status: 'failed'}));
     } finally
     {
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
     }
 };
 export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) => {
-    dispatch(setAppStatus('loading'));
+    dispatch(setAppStatus({status: 'loading'}));
     try
     {
         const res = await todolistApi.createTodo(title);
@@ -100,19 +100,19 @@ export const addTodolist = (title: string) => async (dispatch: ThunkDispatch) =>
         {
             handleServerAppError(res.data, dispatch);
         }
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
-        dispatch(setAppStatus('failed'));
+        dispatch(setAppStatus({status: 'failed'}));
     } finally
     {
-        dispatch(setAppStatus('succeeded'));
+        dispatch(setAppStatus({status: 'succeeded'}));
     }
 };
 export const changeTodolistTitle = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
-        dispatch(setAppStatus('loading'));
+        dispatch(setAppStatus({status: 'loading'}));
         try
         {
             const res = await todolistApi.updateTodo(todolistId, title);
@@ -123,14 +123,14 @@ export const changeTodolistTitle = (todolistId: string, title: string) =>
             {
                 handleServerAppError(res.data, dispatch);
             }
-            dispatch(setAppStatus('succeeded'));
+            dispatch(setAppStatus({status: 'succeeded'}));
         } catch (error)
         {
             handleServerNetworkError(error, dispatch);
-            dispatch(setAppStatus('failed'));
+            dispatch(setAppStatus({status: 'failed'}));
         } finally
         {
-            dispatch(setAppStatus('succeeded'));
+            dispatch(setAppStatus({status: 'succeeded'}));
         }
     }
 

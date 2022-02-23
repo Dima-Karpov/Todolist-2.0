@@ -68,55 +68,60 @@ export const updateTaskAC = (todolistId: string, id: string, model: UpdateDomain
 
 // thunk
 export const fetchTasks = (todolistId: string) => async (dispatch: ThunkDispatch) => {
-    dispatch(setAppStatus('loading'))
-        try {
-            const res = await todolistApi.getTasks(todolistId);
-            const tasks = res.data.items;
-            dispatch(setTasks(todolistId, tasks));
-            dispatch(setAppStatus('succeeded'))
-        } catch (error)
-        {
-            handleServerNetworkError(error, dispatch);
-        }
-    };
+    dispatch(setAppStatus({status: 'loading'}))
+    try
+    {
+        const res = await todolistApi.getTasks(todolistId);
+        const tasks = res.data.items;
+        dispatch(setTasks(todolistId, tasks));
+        dispatch(setAppStatus({status: 'succeeded'}))
+    } catch (error)
+    {
+        handleServerNetworkError(error, dispatch);
+    }
+};
 export const deletTask = (todolistId: string, id: string) => async (dispatch: ThunkDispatch) => {
-    dispatch(setAppStatus('loading'))
-        try
-        {
-            await todolistApi.deletTask(todolistId, id);
-            dispatch(removeTaskAC(todolistId, id));
-            dispatch(setAppStatus('succeeded'))
-        } catch (error)
-        {
-            handleServerNetworkError(error, dispatch);
-        } finally
-        {
-            dispatch(setAppStatus('failed'))
-        }
-    };
+    dispatch(setAppStatus({status: 'loading'}))
+    try
+    {
+        await todolistApi.deletTask(todolistId, id);
+        dispatch(removeTaskAC(todolistId, id));
+        dispatch(setAppStatus({status: 'succeeded'}))
+    } catch (error)
+    {
+        handleServerNetworkError(error, dispatch);
+    } finally
+    {
+        dispatch(setAppStatus({status: 'failed'}))
+    }
+};
 export const addTask = (todolistId: string, title: string) =>
     async (dispatch: ThunkDispatch) => {
-        dispatch(setAppStatus('loading'))
-        try {
+        dispatch(setAppStatus({status: 'loading'}))
+        try
+        {
             const res = await todolistApi.addTask(todolistId, title);
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === 0)
+            {
                 dispatch(addTaskAC(res.data.data.item));
-            } else {
+            } else
+            {
                 handleServerAppError(res.data, dispatch);
             }
-            dispatch(setAppStatus('succeeded'))
-        } catch (error) {
+            dispatch(setAppStatus({status: 'succeeded'}))
+        } catch (error)
+        {
             handleServerNetworkError(error, dispatch);
         } finally
         {
-            dispatch(setAppStatus('failed'))
+            dispatch(setAppStatus({status: 'failed'}))
         }
     };
 export const updateTask = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) =>
     async (
         dispatch: ThunkDispatch,
         getState: () => AppRootStateType) => {
-            dispatch(setAppStatus('loading'))
+        dispatch(setAppStatus({status: 'loading'}))
         try
         {
             const state = getState();
@@ -135,18 +140,21 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
                 deadline: task.deadline,
                 ...domainModel
             };
-            const res =   await todolistApi.updateTask(todolistId, taskId, apiModel);
-            if (res.data.resultCode === 0){
+            const res = await todolistApi.updateTask(todolistId, taskId, apiModel);
+            if (res.data.resultCode === 0)
+            {
                 dispatch(updateTaskAC(todolistId, taskId, apiModel));
-            } else {
+            } else
+            {
                 handleServerAppError(res.data, dispatch);
             }
-            dispatch(setAppStatus('succeeded'))
-        } catch (error) {
+            dispatch(setAppStatus({status: 'succeeded'}))
+        } catch (error)
+        {
             handleServerNetworkError(error, dispatch);
         } finally
         {
-            dispatch(setAppStatus('failed'))
+            dispatch(setAppStatus({status: 'failed'}))
         }
     };
 
@@ -181,7 +189,7 @@ export type ErrorType = {
     isAxiosError: boolean
     request: any
     response: any
-    toJSON: any 
+    toJSON: any
     message: string
     stack: string
 }

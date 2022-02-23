@@ -25,7 +25,7 @@ export const {setIsLoggedIn} = slice.actions;
 
 // thunk
 export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: Dispatch) => {
-  dispatch(setAppStatus('loading'))
+  dispatch(setAppStatus({status: 'loading'} ))
   try
   {
     const result = await authApi.login(dataLogin)
@@ -36,17 +36,17 @@ export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: Dispat
     {
       handleServerAppError(result.data, dispatch);
     }
-    dispatch(setAppStatus('succeeded'));
+    dispatch(setAppStatus({status: 'succeeded'}));
   } catch (error)
   {
     handleServerNetworkError(error, dispatch);
   } finally
   {
-    dispatch(setAppStatus('failed'));
+    dispatch(setAppStatus({status: 'failed'}));
   }
 };
 export const loguotUser = () => async (dispatch: Dispatch) => {
-  dispatch(setAppStatus('loading'))
+  dispatch(setAppStatus({status: 'loading'}))
   try
   {
     const result = await authApi.logout()
@@ -57,13 +57,13 @@ export const loguotUser = () => async (dispatch: Dispatch) => {
     {
       handleServerAppError(result.data, dispatch);
     }
-    dispatch(setAppStatus('succeeded'));
+    dispatch(setAppStatus({status: 'succeeded'}));
   } catch (error)
   {
     handleServerNetworkError(error, dispatch);
   } finally
   {
-    dispatch(setAppStatus('failed'));
+    dispatch(setAppStatus({status: 'failed'}));
   }
 };
 
