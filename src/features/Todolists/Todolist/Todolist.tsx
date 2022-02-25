@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 
 import {deletTask, addTask, updateTask} from "../../../state/reducers/task-reducer";
 import {
-  changeTodolistFilterAC,
+  changeTodolistFilter,
   removeTodolist,
   changeTodolistTitle,
   TodolistDomainType
@@ -32,11 +32,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const dispatch = useDispatch();
 
   const onAllClickHandler = useCallback(
-    () => dispatch(changeTodolistFilterAC(todolist.id, 'all')), [dispatch, todolist.id]);
+    () => dispatch(changeTodolistFilter({id: todolist.id, filter: 'all'})), [dispatch, todolist.id]);
   const onActiveClickHandler = useCallback(
-    () => dispatch(changeTodolistFilterAC(todolist.id, 'active')), [dispatch, todolist.id]);
+    () => dispatch(changeTodolistFilter({id: todolist.id, filter: 'active'})), [dispatch, todolist.id]);
   const onCompletedClickHandler = useCallback(
-    () => dispatch(changeTodolistFilterAC(todolist.id, 'completed')), [dispatch, todolist.id]);
+    () => dispatch(changeTodolistFilter({id: todolist.id, filter: 'completed'})), [dispatch, todolist.id]);
 
   const deleteUnnecessaryTodolsit = useCallback(() => {
     dispatch(removeTodolist(todolist.id));
