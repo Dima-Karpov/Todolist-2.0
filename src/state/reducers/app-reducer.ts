@@ -26,10 +26,9 @@ const slice = createSlice({
     setAppStatus(state, action: PayloadAction<{status: RequestStatusType}>) {
       state.status = action.payload.status;
     },
-    setAppInitialized(state, action: PayloadAction<{value: boolean}>) {
-      state.isInitialized = action.payload.value;
+    setAppInitialized(state, action: PayloadAction<{isInitialized: boolean}>) {
+      state.isInitialized = action.payload.isInitialized;
     },
-
   },
 })
 
@@ -38,22 +37,21 @@ export const {setAppError, setAppStatus, setAppInitialized} = slice.actions;
 
 // thunk
 export const initializeApp = () => async (dispatch: Dispatch) => {
-    dispatch(setAppInitialized({value: false}))
-    try
-    {
-      const result = await authApi.me()
-      if (result.data.resultCode === 0) {
-        dispatch(setIsLoggedIn({value: true}));
-        dispatch(setAppInitialized({value: true}));
-      } else {
-        handleServerAppError(result.data, dispatch);
-      }
-    } catch (error){
-      handleServerNetworkError(error, dispatch);
-    } finally{
-      dispatch(setAppInitialized({value: true}));
+  dispatch(setAppInitialized({isInitialized: false}))
+  try {
+    const result = await authApi.me()
+    if (result.data.resultCode === 0) {
+      dispatch(setIsLoggedIn({value: true}));
+      dispatch(setAppInitialized({isInitialized: true}));
+    } else  {
+      handleServerAppError(result.data, dispatch);
     }
-  };
+  } catch (error) {
+    handleServerNetworkError(error, dispatch);
+  } finally {
+    dispatch(setAppInitialized({isInitialized: true}));
+  }
+};
 
 
 
