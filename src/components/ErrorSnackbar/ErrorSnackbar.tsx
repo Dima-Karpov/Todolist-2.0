@@ -22,7 +22,7 @@ export const Snackbars = () => {
     {
       return;
     }
-    dispatch(setAppError(null))
+    dispatch(setAppError({error: null}))
   };
 
   const isOpen = error !== null;

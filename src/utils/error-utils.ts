@@ -7,14 +7,14 @@ import { Dispatch } from 'react';
 export const handleServerAppError = <T>(data: CommonResponseType<T>, dispatch: Dispatch<SetErrorType | SetStatusType>) => {
   if (data.messages.length)
   {
-    dispatch(setAppError(data.messages[0]))
+    dispatch(setAppError({error: data.messages[0]}))
   } else
   {
-    dispatch(setAppError('Some error occurred'))
+    dispatch(setAppError({error: 'Some error occurred'}))
   }
 }
 
 export const handleServerNetworkError = (error: any, dispatch: Dispatch<SetErrorType | SetStatusType>) => {
   dispatch(setAppError(error.message ? error.message : 'Some error occurred'))
-  dispatch(setAppStatus('failed'))
+  dispatch(setAppStatus({status: 'failed'}))
 }
