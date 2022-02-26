@@ -25,7 +25,7 @@ const slice = createSlice({
         killTodolist(state, action: PayloadAction<{id: string}>) {
             const index = state.findIndex(todolist => todolist.id === action.payload.id);
             if(index > -1){
-                state.slice(index, 1);
+                state.splice(index, 1);
             }
         },
         addNewTodolist(state, action: PayloadAction<{todolist: TodolistType}>) {
@@ -57,7 +57,7 @@ export const {
     changeTodolistFilter,
     setTodolists,
     changeTodolistEntityStatus,
-} = slice.actions;
+            } = slice.actions;
 
 
 // thunk
@@ -68,7 +68,6 @@ export const fetchTodolist = () => async (dispatch: Dispatch | any) => {
         const res = await todolistApi.getTodo();
         dispatch(setTodolists({todolists: res.data}));
         res.data.forEach(tl => dispatch(fetchTasks(tl.id)));
-        dispatch(setAppStatus({status: 'succeeded'}));
         return res.data;
     } catch (error)
     {
@@ -85,7 +84,6 @@ export const removeTodolist = (todoListId: string) => async (dispatch: Dispatch)
         dispatch(changeTodolistEntityStatus({id: todoListId, status: 'loading'}))
         await todolistApi.deletTodo(todoListId);
         dispatch(killTodolist({id: todoListId}));
-        dispatch(setAppStatus({status: 'succeeded'}));
     } catch (error)
     {
         handleServerNetworkError(error, dispatch);
