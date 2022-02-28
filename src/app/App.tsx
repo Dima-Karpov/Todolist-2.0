@@ -46,7 +46,8 @@ export const App: React.FC = (): JSX.Element => {
     dispatch(loguotUser());
   }, [dispatch]);
 
-  if (!isInitialized) {
+  if (!isInitialized)
+  {
     return (
       <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
         <CircularProgressWithLabel value={progress} />
@@ -56,35 +57,31 @@ export const App: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <BrowserRouter>
-
-        <AppBar position="static">
-          <Snackbars />
-          <Toolbar style={{justifyContent: 'space-between'}}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{mr: 2}}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-              Todolist
-            </Typography>
-            {isLoggedIn &&  <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
-          </Toolbar>
-          {status === 'loading' ? <LinearProgress /> : <></>}
-        </AppBar>
-        <Container fixed>
-          <Routes>
-            <Route path={'/'} element={<TodolistList />} />
-            <Route path={'/login'} element={<Login />} />
-          </Routes>
-        </Container>
-      </BrowserRouter>
-
+      <AppBar position="static">
+        <Snackbars />
+        <Toolbar style={{justifyContent: 'space-between'}}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{mr: 2}}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+            Todolist
+          </Typography>
+          {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+        </Toolbar>
+        {status === 'loading' ? <LinearProgress /> : <></>}
+      </AppBar>
+      <Container fixed>
+        <Routes>
+          <Route path={'/'} element={<TodolistList />} />
+          <Route path={'/login'} element={<Login />} />
+        </Routes>
+      </Container>
     </>
   );
 };
