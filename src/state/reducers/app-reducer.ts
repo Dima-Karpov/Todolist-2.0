@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Dispatch} from 'redux';
 import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
@@ -16,6 +16,23 @@ const initialState: InitialStateType = {
   isInitialized: false,
 };
 
+export const initializeApp = createAsyncThunk('app/initializeApp', async (param, thunkAPI) => {
+  thunkAPI.dispatch(setAppInitialized({isInitialized: false}))
+  try {
+    const result = await authApi.me()
+    if (result.data.resultCode === 0) {
+      thunkAPI.dispatch(setIsLoggedIn({isLoggedIn: true}));
+    } else {
+      handleServerAppError(result.data, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue({});
+    }
+  } catch (error) {
+    handleServerNetworkError(error, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue({});
+  }
+
+});
+
 const slice = createSlice({
   name: 'app',
   initialState: initialState,
@@ -30,30 +47,14 @@ const slice = createSlice({
       state.isInitialized = action.payload.isInitialized;
     },
   },
-})
-
+  extraReducers: builder => {
+    builder.addCase(initializeApp.fulfilled, (state) => {
+      state.isInitialized = true;
+    });
+  },
+});
 export const appReducer = slice.reducer;
 export const {setAppError, setAppStatus, setAppInitialized} = slice.actions;
-
-// thunk
-export const initializeApp = () => async (dispatch: Dispatch) => {
-  dispatch(setAppInitialized({isInitialized: false}))
-  try {
-    const result = await authApi.me()
-    if (result.data.resultCode === 0) {
-      dispatch(setIsLoggedIn({isLoggedIn: true}));
-      dispatch(setAppInitialized({isInitialized: true}));
-    } else  {
-      handleServerAppError(result.data, dispatch);
-    }
-  } catch (error) {
-    handleServerNetworkError(error, dispatch);
-  } finally {
-    dispatch(setAppInitialized({isInitialized: true}));
-  }
-};
-
-
 
 export type SetErrorType = ReturnType<typeof setAppError>
 export type SetStatusType = ReturnType<typeof setAppStatus>
