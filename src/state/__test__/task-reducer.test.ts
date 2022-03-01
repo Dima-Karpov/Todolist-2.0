@@ -37,7 +37,7 @@ test('correct task should be deleted from correct array', () => {
 });
 
 test('correct task should be added to correct array', () => {
-    let param = {
+    let task = {
         todoListId: 'todolistId2',
         title: 'newTask',
         status: TaskStatuses.New,
@@ -49,7 +49,7 @@ test('correct task should be added to correct array', () => {
         startDate: '',
         id: 'id exists'
     };
-    const action = addTask.fulfilled({task: param}, 'requestId', {task: param});
+    const action = addTask.fulfilled(task, 'requestId', {title: task.title, todolistId: task.todoListId});
     const endState = taskReducer(startState, action);
 
     expect(endState['todolistId1'].length).toBe(3);
@@ -60,7 +60,7 @@ test('correct task should be added to correct array', () => {
 });
 
 test('status of specified task should be changed', () => {
-    const param = {todolistId: 'todolistId2', id: '2', model: {status: TaskStatuses.Draft}};
+    const param = {todolistId: 'todolistId2', taskId: '2', domainModel: {status: TaskStatuses.Draft}};
     const action = updateTask.fulfilled(param, 'requestId', param);
 
     const endState = taskReducer(startState, action);
@@ -70,7 +70,7 @@ test('status of specified task should be changed', () => {
 });
 
 test('title of specified task should be chaged', () => {
-    const param = {todolistId: 'todolistId2', id: '2', model: {title: 'newName'}}
+    let param = {todolistId: 'todolistId2', taskId: '2', domainModel: {title: 'newName'}}
     const action = updateTask.fulfilled(param, 'requestId', param);
     
     const endState = taskReducer(startState, action);
