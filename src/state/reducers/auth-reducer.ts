@@ -2,49 +2,56 @@ import {Dispatch} from 'redux';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setAppStatus} from './app-reducer';
 import {authApi, LoginParamsType} from '../../dal/login-api';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AxiosError} from 'axios';
+import {FieldErrorType} from '../../dal/todolists-api';
 
 const initialState = {
   isLoggedIn: false,
 };
 
+export const loginUser = createAsyncThunk<
+                                      {isLoggedIn: boolean},
+                                      {dataLogin: LoginParamsType},
+                                      {rejectValue: {errors: string[], fieldsErrors?: FieldErrorType[]}}
+                                        >('auth/loginUser', async (param, thunkAPI) => {
+  thunkAPI.dispatch(setAppStatus({status: 'loading'}))
+  try {
+    const result = await authApi.login(param.dataLogin)
+    if (result.data.resultCode === 0) {
+      return {isLoggedIn: true};
+    } else {
+      handleServerAppError(result.data, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue({errors: result.data.messages, fieldsErrors: result.data.fieldsError});
+    }
+  } catch (e: any) {
+    let error: AxiosError<any> = e;
+    handleServerNetworkError(error, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: undefined});
+  } finally {
+    thunkAPI.dispatch(setAppStatus({status: 'failed'}));
+  }
+
+});
+
 const slice = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    setIsLoggedIn(state, action: PayloadAction<{value: boolean}>) {
-      state.isLoggedIn = action.payload.value;
+    setIsLoggedIn(state, action: PayloadAction<{isLoggedIn: boolean}>){
+      state.isLoggedIn = action.payload.isLoggedIn;
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn
+    })
   },
 })
 
 export const authReducer = slice.reducer;
-
-// action
 export const {setIsLoggedIn} = slice.actions;
 
-// thunk
-export const loginUser = (dataLogin: LoginParamsType) => async (dispatch: Dispatch) => {
-  dispatch(setAppStatus({status: 'loading'} ))
-  try
-  {
-    const result = await authApi.login(dataLogin)
-    if (result.data.resultCode === 0)
-    {
-      dispatch(setIsLoggedIn({value: true}));
-    } else
-    {
-      handleServerAppError(result.data, dispatch);
-    }
-    dispatch(setAppStatus({status: 'succeeded'}));
-  } catch (error)
-  {
-    handleServerNetworkError(error, dispatch);
-  } finally
-  {
-    dispatch(setAppStatus({status: 'failed'}));
-  }
-};
 export const loguotUser = () => async (dispatch: Dispatch) => {
   dispatch(setAppStatus({status: 'loading'}))
   try
@@ -52,7 +59,7 @@ export const loguotUser = () => async (dispatch: Dispatch) => {
     const result = await authApi.logout()
     if (result.data.resultCode === 0)
     {
-      dispatch(setIsLoggedIn({value: false}));
+      dispatch(setIsLoggedIn({isLoggedIn: false}));
     } else
     {
       handleServerAppError(result.data, dispatch);
@@ -67,7 +74,6 @@ export const loguotUser = () => async (dispatch: Dispatch) => {
   }
 };
 
-export type IsLoggedInType = ReturnType<typeof setIsLoggedIn>
 
 export type ErrorType = {
   config: any

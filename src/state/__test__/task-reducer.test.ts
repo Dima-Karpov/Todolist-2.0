@@ -1,5 +1,5 @@
 import { TaskPriorities, TaskStatuses } from "../../dal/todolists-api";
-import {taskReducer, TasksStateType, setTasks, removeTask, addNewTask, updateCurrentTask } from "../reducers/task-reducer";
+import {taskReducer, TasksStateType, addTask, updateTask, fetchTasks, deletTask } from "../reducers/task-reducer";
 import {addNewTodolist, killTodolist, setTodolists} from './../reducers/todolist-reducer';
 
 
@@ -26,7 +26,8 @@ beforeEach(() => {
 })
 
 test('correct task should be deleted from correct array', () => {
-    const action = removeTask({todolistId: 'todolistId2', id: '2'});
+    const param = {todolistId: 'todolistId2', id: '2'};
+    const action = deletTask.fulfilled(param, 'requestId', param);
 
     const endState = taskReducer(startState, action);
 
@@ -36,7 +37,7 @@ test('correct task should be deleted from correct array', () => {
 });
 
 test('correct task should be added to correct array', () => {
-    const action = addNewTask({task: {
+    let param = {
         todoListId: 'todolistId2',
         title: 'newTask',
         status: TaskStatuses.New,
@@ -47,7 +48,8 @@ test('correct task should be added to correct array', () => {
         priority: 0,
         startDate: '',
         id: 'id exists'
-    }});
+    };
+    const action = addTask.fulfilled({task: param}, 'requestId', {task: param});
     const endState = taskReducer(startState, action);
 
     expect(endState['todolistId1'].length).toBe(3);
@@ -58,7 +60,8 @@ test('correct task should be added to correct array', () => {
 });
 
 test('status of specified task should be changed', () => {
-    const action = updateCurrentTask({todolistId: 'todolistId2', id: '2', model: {status: TaskStatuses.Draft}});
+    const param = {todolistId: 'todolistId2', id: '2', model: {status: TaskStatuses.Draft}};
+    const action = updateTask.fulfilled(param, 'requestId', param);
 
     const endState = taskReducer(startState, action);
     
@@ -67,7 +70,8 @@ test('status of specified task should be changed', () => {
 });
 
 test('title of specified task should be chaged', () => {
-    const action = updateCurrentTask({todolistId: 'todolistId2', id: '2', model: {title: 'newName'}});
+    const param = {todolistId: 'todolistId2', id: '2', model: {title: 'newName'}}
+    const action = updateTask.fulfilled(param, 'requestId', param);
     
     const endState = taskReducer(startState, action);
     
@@ -108,7 +112,7 @@ test('propertry with todolistId should be deleted', () => {
 });
 
 test('task should be added for todolist', () => {
-    const action = setTasks({todolistId: 'todolistId1', tasks: startState['todolistId1']});
+    const action = fetchTasks.fulfilled({todolistId: 'todolistId1', tasks: startState['todolistId1']}, '', 'todolistId1');
 
     const endState = taskReducer({
         'todolistId2': [],

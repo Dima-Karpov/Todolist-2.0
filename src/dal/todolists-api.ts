@@ -36,24 +36,27 @@ export const todolistApi = {
     },
 };
 
-
+export type FieldErrorType = {
+    field: string,
+    error: string, 
+}
 
 export type CommonResponseType<T = {}> = {
-    resultCode: number
-    messages: string[]
-    fieldError: string[]
-    data: T
+    resultCode: number,
+    messages: string[],
+    fieldsError?: FieldErrorType[],
+    data: T,
 };
 export type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
+    id: string,
+    title: string,
+    addedDate: string,
+    order: number,
 };
 type GetTasksResponse = {
-    error: string | null
-    totalCount: number
-    items: TaskType[]
+    error: string | null,
+    totalCount: number,
+    items: TaskType[],
 };
 export enum TaskStatuses {
     New = 0,
@@ -69,25 +72,25 @@ export enum TaskPriorities {
     Later = 4,
 };
 export type TaskType = {
-    description: string
-    title: string
-    status: TaskStatuses
-    priority: TaskPriorities
+    description: string,
+    title: string,
+    status: TaskStatuses,
+    priority: TaskPriorities,
     startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: string
+    deadline: string,
+    id: string,
+    todoListId: string,
+    order: number,
+    addedDate: string,
     // entityStatus: RequestStatusType
 };
 export type UpdateTaskModelType = {
-    title: string
-    description: string
-    status: TaskStatuses
-    priority: TaskPriorities
-    startDate: string
-    deadline: string
+    title: string,
+    description: string,
+    status: TaskStatuses,
+    priority: TaskPriorities,
+    startDate: string,
+    deadline: string,
 };
 
 export type RequestStatusType = 'loading' | 'idle' | 'succeeded' | 'failed';

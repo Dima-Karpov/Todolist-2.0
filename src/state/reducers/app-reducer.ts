@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Dispatch} from 'redux';
 import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {IsLoggedInType, setIsLoggedIn} from './auth-reducer';
+import {setIsLoggedIn} from './auth-reducer';
 
 type InitialStateType = {
   status: RequestStatusType,
@@ -41,7 +41,7 @@ export const initializeApp = () => async (dispatch: Dispatch) => {
   try {
     const result = await authApi.me()
     if (result.data.resultCode === 0) {
-      dispatch(setIsLoggedIn({value: true}));
+      dispatch(setIsLoggedIn({isLoggedIn: true}));
       dispatch(setAppInitialized({isInitialized: true}));
     } else  {
       handleServerAppError(result.data, dispatch);

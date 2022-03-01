@@ -1,9 +1,9 @@
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
-import {useFormik} from 'formik';
+import {FormikHelpers, useFormik} from 'formik';
 
-import {AppRootStateType} from '../../../state/store';
+import {useAppDispatch, AppRootStateType} from '../../../state/store';
 import {loginUser} from '../../../state/reducers/auth-reducer';
 
 import Grid from '@mui/material/Grid';
@@ -15,8 +15,15 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
+
+type FormValues = {
+  email: string,
+  password: string,
+  rememberMe: boolean,
+};
+
 export const Login: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
 
   const {handleSubmit, getFieldProps, values, errors, } = useFormik({
@@ -37,10 +44,16 @@ export const Login: React.FC = () => {
     initialValues: {
       email: '',
       password: '',
-      rememberMe: false
+      rememberMe: false,
     },
-    onSubmit: values => {
-      dispatch(loginUser(values))
+    onSubmit: async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
+      const result = await dispatch(loginUser({dataLogin: values}));
+      if(loginUser.rejected.match(result)) {
+        if(result.payload?.fieldsErrors?.length) {
+          const error = result.payload?.fieldsErrors[0];
+          formikHelpers.setFieldError(error.field, error.error);
+        }
+      }
     },
   });
 
