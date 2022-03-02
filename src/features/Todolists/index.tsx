@@ -5,8 +5,7 @@ import {Navigate} from 'react-router-dom';
 import {AddItemForm} from '../../components/AddItemForm';
 import {Todolist} from './Todolist';
 
-import {selectTodolsts} from '../../state/reducers/todolist-reducer';
-import {todolistsActions} from '../../state/reducers/todolist-actions';
+import {selectTodolsts, todolistsActions} from '../../state/reducers/todolist-reducer';
 import {selectTask} from '../../state/reducers/task-reducer';
 import {selectIsLoggedIn} from '../../state/reducers/auth-reducer';
 

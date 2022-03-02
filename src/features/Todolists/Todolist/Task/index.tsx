@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import {useActions} from "../../../../state/hooks/useActions";
-import {tasksActions} from "../../../../state/reducers/tasks-actions";
+import {tasksActions} from "../../../../state/reducers/task-reducer";
 
 
 type TaskPropsType = {
