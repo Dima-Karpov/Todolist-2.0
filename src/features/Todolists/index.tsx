@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
-import {Todolist} from './Todolist/Todolist';
+import {Todolist} from './Todolist';
 
 import {useAppDispatch} from '../../state/store';
 import {addTodolist, fetchTodolist, selectTodolsts} from '../../state/reducers/todolist-reducer';

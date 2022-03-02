@@ -12,7 +12,7 @@ import {
 
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {Task} from "./Task/Task";
+import {Task} from "./Task";
 
 import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
 

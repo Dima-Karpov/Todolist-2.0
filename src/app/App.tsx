@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
-import {TodolistList} from '../features/Todolists/TodolistList';
+import {TodolistList} from '../features/Todolists';
 import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
-import {Login} from '../features/Todolists/Login/Login';
+import {Login} from '../features/Todolists/Login';
 import {CircularProgressWithLabel} from '../features/Progress';
 
 import {useAppDispatch} from '../state/store';
@@ -28,7 +28,7 @@ export const App: React.FC = (): JSX.Element => {
   const isInitialized = useSelector(selectIsInitialized);
   const dispatch = useAppDispatch();
 
-  const [progress, setProgress] = React.useState(10);
+  const [progress, setProgress] = useState(10);
 
   useEffect(() => {
     const timer = setInterval(() => {
