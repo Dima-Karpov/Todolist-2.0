@@ -1,35 +1,38 @@
-import React, { ChangeEvent, useCallback } from "react";
+import React, {ChangeEvent, useCallback} from "react";
 
-import { TaskStatuses, TaskType } from "../../../../dal/todolists-api";
-
-import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan";
+import {TaskStatuses, TaskType} from "../../../../dal/todolists-api";
+import {EditableSpan} from "../../../../components/EditableSpan";
 
 import Checkbox from '@mui/material/Checkbox';
-import { pink } from '@mui/material/colors';
+import {pink} from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import {useActions} from "../../../../state/hooks/useActions";
+import {tasksActions} from "../../../../state/reducers/tasks-actions";
 
 
 type TaskPropsType = {
   task: TaskType
   todolistId: string
-
-  removeTask: (todolistId: string, id: string) => void
-  onChangeTitleHandler: (todolistId: string, id: string, title: string) => void
-  onChangeStatusHandler: (todolistId: string, id: string, status: TaskStatuses) => void
 };
 
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
-  const { task, todolistId, removeTask, onChangeTitleHandler, onChangeStatusHandler } = props
+  const {task, todolistId} = props
+  const {deletTask, updateTask} = useActions(tasksActions);
 
-  const deletingUnnecessaryTask = useCallback(() => { removeTask(todolistId, task.id) }, [removeTask, task.id, todolistId]);
+  const deletingUnnecessaryTask = useCallback(() => {
+    deletTask({todolistId, id: task.id})
+  }, [deletTask, task.id, todolistId]);
 
   const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked;
-    onChangeStatusHandler(todolistId, task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New)
-  }, [onChangeStatusHandler, task.id, todolistId]);
+    updateTask({todolistId, taskId: task.id, domainModel: {status: newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New}})
+  }, [updateTask, task.id, todolistId]);
 
-  const onChangeTaskTitle = useCallback((newValue: string) => { onChangeTitleHandler(todolistId, task.id, newValue) }, [onChangeTitleHandler, task.id, todolistId]);
+  const onChangeTaskTitle = useCallback((title: string) => {
+    updateTask({todolistId, taskId: task.id, domainModel: {title}})
+  }, [updateTask, task.id, todolistId]);
 
   return (
     <div className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>

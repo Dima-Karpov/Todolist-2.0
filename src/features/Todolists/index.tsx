@@ -1,35 +1,32 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 
-import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
+import {AddItemForm} from '../../components/AddItemForm';
 import {Todolist} from './Todolist';
 
-import {useAppDispatch} from '../../state/store';
-import {addTodolist, fetchTodolist, selectTodolsts} from '../../state/reducers/todolist-reducer';
+import {selectTodolsts} from '../../state/reducers/todolist-reducer';
+import {todolistsActions} from '../../state/reducers/todolist-actions';
 import {selectTask} from '../../state/reducers/task-reducer';
 import {selectIsLoggedIn} from '../../state/reducers/auth-reducer';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
+import {useActions} from '../../state/hooks/useActions';
 
-type TodolistListPropsType = {};
 
-export const TodolistList: React.FC<TodolistListPropsType> = React.memo(() => {
-  const dispatch = useAppDispatch();
+export const TodolistList: React.FC<{}> = React.memo(() => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const todolists = useSelector(selectTodolsts);
   const tasks = useSelector(selectTask);
 
-  const addNewTodolist = useCallback((title: string) => {
-    dispatch(addTodolist({title}));
-  }, [dispatch]);
+  const {addTodolist, fetchTodolist} = useActions(todolistsActions);
 
   useEffect(() => {
-    dispatch(fetchTodolist())
-  }, [dispatch]);
-  
+    fetchTodolist();
+  }, [fetchTodolist]);
+
   if (!isLoggedIn) {
     return <Navigate to={'/login'} />
   };
@@ -37,7 +34,7 @@ export const TodolistList: React.FC<TodolistListPropsType> = React.memo(() => {
   return (
     <>
       <Grid container style={{padding: '20px 0px'}}>
-        <AddItemForm addItem={addNewTodolist} />
+        <AddItemForm addItem={addTodolist} />
       </Grid>
       <Grid container spacing={7}>
         {todolists.map(tl => {
@@ -53,8 +50,7 @@ export const TodolistList: React.FC<TodolistListPropsType> = React.memo(() => {
               </Paper>
             </Grid>
           )
-        })
-        }
+        })}
       </Grid>
     </>
   )

@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import ControlPoint from "@mui/icons-material/ControlPoint";
 
 type AddItemFormPropsType = {
-    addItem: (title: string) => void
+    addItem: (param: {title: string}) => void
     disabled?: boolean
 }
 
@@ -21,7 +21,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     const addNewItem = useCallback(() => {
         if (newTaskTitle.trim() !== '')
         {
-            addItem(newTaskTitle.trim());
+            addItem({title: newTaskTitle.trim()});
             setNewTaskTitle('');
         } else
         {

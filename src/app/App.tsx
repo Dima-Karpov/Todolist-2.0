@@ -3,12 +3,13 @@ import {Route, Routes} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
 import {TodolistList} from '../features/Todolists';
-import {Snackbars} from '../components/ErrorSnackbar/ErrorSnackbar';
+import {Snackbars} from '../components/ErrorSnackbar';
 import {Login} from '../features/Todolists/Login';
 import {CircularProgressWithLabel} from '../features/Progress';
 
 import {useAppDispatch} from '../state/store';
 import {loguotUser, selectIsLoggedIn} from '../state/reducers/auth-reducer';
+import {selectStatus, selectIsInitialized, initializeApp} from '../state/reducers/app-reducer';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,7 +19,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
-import {selectStatus, selectIsInitialized, initializeApp} from '../state/reducers/app-reducer';
 
 
 
