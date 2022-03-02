@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {Dispatch} from 'redux';
 import {todolistApi, TodolistType} from '../../dal/todolists-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setAppStatus, RequestStatusType} from './app-reducer';
@@ -70,7 +69,6 @@ export const addTodolist = createAsyncThunk('todolists/addTodolist', async (para
             handleServerAppError(res.data, thunkAPI.dispatch);
             return thunkAPI.rejectWithValue({});
         }
-        thunkAPI.dispatch(setAppStatus({status: 'succeeded'}));
     } catch (error) {
         handleServerNetworkError(error, thunkAPI.dispatch);
         thunkAPI.dispatch(setAppStatus({status: 'failed'}));
@@ -121,54 +119,6 @@ export const {
     changeTodolistEntityStatus,
             } = slice.actions;
 
-
-// thunk
-
-// export const addTodolist = (title: string) => async (dispatch: Dispatch) => {
-//     dispatch(setAppStatus({status: 'loading'}));
-//     try
-//     {
-//         const res = await todolistApi.createTodo(title);
-//         if (res.data.resultCode === 0)
-//         {
-//             dispatch(addNewTodolist({todolist: res.data.data.item}))
-//         } else
-//         {
-//             handleServerAppError(res.data, dispatch);
-//         }
-//         dispatch(setAppStatus({status: 'succeeded'}));
-//     } catch (error)
-//     {
-//         handleServerNetworkError(error, dispatch);
-//         dispatch(setAppStatus({status: 'failed'}));
-//     } finally
-//     {
-//         dispatch(setAppStatus({status: 'succeeded'}));
-//     }
-// };
-// export const changeTodolistTitle = (todolistId: string, title: string) =>
-//     async (dispatch: Dispatch) => {
-//         dispatch(setAppStatus({status: 'loading'}));
-//         try
-//         {
-//             const res = await todolistApi.updateTodo(todolistId, title);
-//             if (res.data.resultCode === 0)
-//             {
-//                 dispatch(changeTodolistsTitle({id: todolistId,  title}));
-//             } else
-//             {
-//                 handleServerAppError(res.data, dispatch);
-//             }
-//             dispatch(setAppStatus({status: 'succeeded'}));
-//         } catch (error)
-//         {
-//             handleServerNetworkError(error, dispatch);
-//             dispatch(setAppStatus({status: 'failed'}));
-//         } finally
-//         {
-//             dispatch(setAppStatus({status: 'succeeded'}));
-//         }
-//     }
 
 export type FilterValuesType = 'all' | 'completed' | 'active';
 export type TodolistDomainType = TodolistType & {

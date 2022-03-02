@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Dispatch} from 'redux';
 import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setIsLoggedIn} from './auth-reducer';
