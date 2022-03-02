@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import './index.css';
 
-import {TodolistDomainType, todolistsActions} from "../../../state/reducers/todolist-reducer";
+import {FilterValuesType, TodolistDomainType, todolistsActions} from "../../../state/reducers/todolist-reducer";
 import {tasksActions} from '../../../state/reducers/task-reducer';
 
 import {AddItemForm} from "../../../components/AddItemForm";
@@ -10,10 +10,11 @@ import {Task} from "./Task";
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
 
 import {useActions} from '../../../state/hooks/useActions';
 import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
+import {PropTypes} from '@mui/material';
+import Button from '@mui/material/Button';
 
 
 type TodolistPropsType = {
@@ -71,6 +72,24 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const сurrentTasks = newTasks.map(t => <Task
     key={t.id} task={t} todolistId={todolist.id} />);
 
+  const renderFilterButton = (
+    buttonFilter: FilterValuesType,
+    onClick: () => void,
+    text: string,
+    outlined?: boolean
+  ) => {
+    const additionalOption = outlined ? 'outlined' : 'contained';
+
+    return (
+      <Button
+        variant={todolist.filter === buttonFilter ? additionalOption : 'text'}
+        color={'primary'}
+        onClick={onClick}>
+        {text}
+      </Button>
+    )
+  }
+
 
   return (
     <div>
@@ -93,25 +112,9 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
       </div>
 
       <div className='block-button'>
-        <Button
-          variant={todolist.filter === 'all' ? 'outlined' : 'text'}
-          onClick={onAllClickHandler}>
-          All
-        </Button>
-        <Button
-          style={{marginLeft: "5px"}}
-          color={'primary'}
-          variant={todolist.filter === 'active' ? 'contained' : 'text'}
-          onClick={onActiveClickHandler}>
-          Active
-        </Button>
-        <Button
-          style={{marginLeft: "5px"}}
-          color={'primary'}
-          variant={todolist.filter === 'completed' ? 'contained' : 'text'}
-          onClick={onCompletedClickHandler}>
-          Completed
-        </Button>
+        {renderFilterButton('all', onAllClickHandler, 'All', true)}
+        {renderFilterButton('active', onActiveClickHandler, 'Active')}
+        {renderFilterButton('completed', onCompletedClickHandler, 'Completed')}
       </div>
     </div>
   )

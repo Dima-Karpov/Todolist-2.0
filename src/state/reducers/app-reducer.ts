@@ -59,6 +59,8 @@ export const {setAppError, setAppStatus, setAppInitialized} = slice.actions;
 export const selectStatus = (state: AppRootStateType) => state.app.status;
 export const selectIsInitialized = (state: AppRootStateType) => state.app.isInitialized;
 
+export const appActions = {initializeApp, ...slice.reducer};
+
 export type SetErrorType = ReturnType<typeof setAppError>
 export type SetStatusType = ReturnType<typeof setAppStatus>
 
