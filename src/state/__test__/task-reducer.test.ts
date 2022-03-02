@@ -1,6 +1,6 @@
 import { TaskPriorities, TaskStatuses } from "../../dal/todolists-api";
 import {taskReducer, TasksStateType, addTask, updateTask, fetchTasks, deletTask } from "../reducers/task-reducer";
-import {addNewTodolist, killTodolist, setTodolists} from './../reducers/todolist-reducer';
+import {addTodolist, fetchTodolist, removeTodolist} from './../reducers/todolist-reducer';
 
 
 let startState: TasksStateType = {};
@@ -81,12 +81,13 @@ test('title of specified task should be chaged', () => {
 });
 
 test('new array should be added when new todolist is added', () => {
-    const action = addNewTodolist({todolist: {
+    const action = addTodolist.fulfilled({todolist: {
         id: 'todolistId3',
         title: 'Todolist 3',
         order: 0,
         addedDate: '',
-    }});
+    }
+    }, 'requestId', {title: 'Todolist 3'});
 
     const endState = taskReducer(startState, action);
 
@@ -101,7 +102,8 @@ test('new array should be added when new todolist is added', () => {
 });
 
 test('propertry with todolistId should be deleted', () => {
-    const action = killTodolist({id: 'todolistId2'});
+    const param = {id: 'todolistId2'}
+    const action = removeTodolist.fulfilled(param, 'requestId', {todoListId: 'todolistId2'});
     
     const endState = taskReducer(startState, action);
 
@@ -124,10 +126,13 @@ test('task should be added for todolist', () => {
 });
 
 test('empty arrays should be added when we set todolists', () => {
-    const action = setTodolists({todolists: [
-        {id: '1', title: 'title 1', order: 0, addedDate: ''},
-        {id: '2', title: 'title 2', order: 0, addedDate: ''},
-    ]});
+    const payload =
+        [
+            {id: '1', title: 'title 1', order: 0, addedDate: ''},
+            {id: '2', title: 'title 2', order: 0, addedDate: ''},
+        ]
+    
+    const action = fetchTodolist.fulfilled(payload, 'requestId');
 
     const endState = taskReducer({}, action);
 

@@ -39,10 +39,10 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     () => dispatch(changeTodolistFilter({id: todolist.id, filter: 'completed'})), [dispatch, todolist.id]);
 
   const deleteUnnecessaryTodolsit = useCallback(() => {
-    dispatch(removeTodolist(todolist.id));
+    dispatch(removeTodolist({todoListId: todolist.id}));
   }, [dispatch, todolist.id]);
   const replaceNewTitleTodolsit = useCallback((newTitle: string) => {
-    dispatch(changeTodolistTitle(todolist.id, newTitle));
+    dispatch(changeTodolistTitle({todolistId: todolist.id, title: newTitle}));
   }, [dispatch, todolist.id]);
 
 

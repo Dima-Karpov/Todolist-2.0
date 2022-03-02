@@ -23,7 +23,7 @@ export const TodolistList: React.FC<TodolistListPropsType> = React.memo(props =>
   const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
 
   const addNewTodolist = useCallback((title: string) => {
-    dispatch(addTodolist(title));
+    dispatch(addTodolist({title}));
   }, [dispatch]);
 
   useEffect(() => {

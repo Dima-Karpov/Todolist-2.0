@@ -1,12 +1,9 @@
-import {Dispatch} from 'redux';
 import {TaskPriorities, TaskStatuses, TaskType, todolistApi, UpdateTaskModelType} from '../../dal/todolists-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setAppStatus} from './app-reducer';
 import {AppRootStateType} from '../store';
-import {addNewTodolist, killTodolist, setTodolists} from "./todolist-reducer";
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-
-const initialState: TasksStateType = {};
+import {addTodolist, fetchTodolist, removeTodolist} from "./todolist-reducer";
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 export const fetchTasks = createAsyncThunk('task/fethcTasks', async (todolistId: string, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}));
@@ -18,6 +15,7 @@ export const fetchTasks = createAsyncThunk('task/fethcTasks', async (todolistId:
     } catch (error)
     {
         handleServerNetworkError(error, thunkAPI.dispatch);
+        return thunkAPI.rejectWithValue({});
     } finally
     {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
@@ -32,6 +30,7 @@ export const deletTask = createAsyncThunk('task/deletTask', async (param: {todol
     } catch (error)
     {
         handleServerNetworkError(error, thunkAPI.dispatch);
+        return thunkAPI.rejectWithValue({});
     } finally
     {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
@@ -93,18 +92,18 @@ export const updateTask = createAsyncThunk('task/updateTask', async (
 
 const slice = createSlice({
     name: 'task',
-    initialState: initialState,
+    initialState: {} as TasksStateType,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(addNewTodolist, (state, action) => {
+        builder.addCase(addTodolist.fulfilled, (state, action) => {
             state[action.payload.todolist.id] = [];
         });
-        builder.addCase(setTodolists, (state, action) => {
-            action.payload.todolists.forEach((todolist: any) => {
+        builder.addCase(fetchTodolist.fulfilled, (state, action) => {
+            action.payload.forEach((todolist: any) => {
                 state[todolist.id] = [];
             });
         });
-        builder.addCase(killTodolist, (state, action) => {
+        builder.addCase(removeTodolist.fulfilled, (state, action) => {
             delete state[action.payload.id];
         });
         builder.addCase(fetchTasks.fulfilled, (state, action) => {
