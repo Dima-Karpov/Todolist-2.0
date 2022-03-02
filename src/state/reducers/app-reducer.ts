@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {AppRootStateType} from '../store';
 import {setIsLoggedIn} from './auth-reducer';
 
 type InitialStateType = {
@@ -54,6 +55,9 @@ const slice = createSlice({
 });
 export const appReducer = slice.reducer;
 export const {setAppError, setAppStatus, setAppInitialized} = slice.actions;
+
+export const selectStatus = (state: AppRootStateType) => state.app.status;
+export const selectIsInitialized = (state: AppRootStateType) => state.app.isInitialized;
 
 export type SetErrorType = ReturnType<typeof setAppError>
 export type SetStatusType = ReturnType<typeof setAppStatus>

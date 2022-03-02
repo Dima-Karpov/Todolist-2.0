@@ -1,8 +1,7 @@
 import React, {useCallback} from 'react';
 import './index.css';
 
-import {useDispatch} from 'react-redux';
-
+import {useAppDispatch} from '../../../state/store';
 import {deletTask, addTask, updateTask} from "../../../state/reducers/task-reducer";
 import {
   changeTodolistFilter,
@@ -29,7 +28,7 @@ type TodolistPropsType = {
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const {todolist, tasks, } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onAllClickHandler = useCallback(
     () => dispatch(changeTodolistFilter({id: todolist.id, filter: 'all'})), [dispatch, todolist.id]);

@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {todolistApi, TodolistType} from '../../dal/todolists-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {AppRootStateType} from '../store';
 import {setAppStatus, RequestStatusType} from './app-reducer';
 import {fetchTasks} from './task-reducer';
 
@@ -114,11 +115,9 @@ const slice = createSlice({
 });
 
 export const todolistReducer = slice.reducer
-export const {
-    changeTodolistFilter,
-    changeTodolistEntityStatus,
-            } = slice.actions;
+export const {changeTodolistFilter, changeTodolistEntityStatus} = slice.actions;
 
+export const selectTodolsts = (state: AppRootStateType) => state.todolist;
 
 export type FilterValuesType = 'all' | 'completed' | 'active';
 export type TodolistDomainType = TodolistType & {

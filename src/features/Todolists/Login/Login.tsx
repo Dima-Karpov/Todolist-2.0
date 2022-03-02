@@ -3,8 +3,8 @@ import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 import {FormikHelpers, useFormik} from 'formik';
 
-import {useAppDispatch, AppRootStateType} from '../../../state/store';
-import {loginUser} from '../../../state/reducers/auth-reducer';
+import {useAppDispatch} from '../../../state/store';
+import {loginUser, selectIsLoggedIn} from '../../../state/reducers/auth-reducer';
 
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
@@ -24,7 +24,7 @@ type FormValues = {
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const {handleSubmit, getFieldProps, values, errors, } = useFormik({
     validate: (values) => {

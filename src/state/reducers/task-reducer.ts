@@ -136,6 +136,8 @@ const slice = createSlice({
 
 export const taskReducer = slice.reducer;
 
+export const selectTask = (state: AppRootStateType) => state.tasks;
+
 export type TasksStateType = {
     [key: string]: TaskType[]
 };
