@@ -3,31 +3,36 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import ControlPoint from "@mui/icons-material/ControlPoint";
 
+export type AddItemFromSubmitHelperType = {
+    setError: (error: string) => void,
+    setTitle: (title: string) => void,
+};
+
 type AddItemFormPropsType = {
-    addItem: (param: {title: string}) => void
-    disabled?: boolean
-}
+    addItem: (param: {title: string}, helper: AddItemFromSubmitHelperType) => void,
+    disabled?: boolean,
+};
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     const {addItem, disabled, } = props;
 
-    const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
 
     const onChangeNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value);
+        setTitle(e.currentTarget.value);
     };
 
-    const addNewItem = useCallback(() => {
-        if (newTaskTitle.trim() !== '')
+    const addNewItem = useCallback( () => {
+        if (title.trim() !== '')
         {
-            addItem({title: newTaskTitle.trim()});
-            setNewTaskTitle('');
+            addItem({title: title.trim()}, {setError, setTitle});
+
         } else
         {
             setError('Title is requared')
         }
-    }, [addItem, newTaskTitle]);
+    }, [addItem, title]);
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (error !== null)
@@ -45,7 +50,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
     return (
         <div>
             <TextField
-                value={newTaskTitle}
+                value={title}
                 onChange={onChangeNewTaskTitle}
                 onKeyPress={onKeyPressHandler}
                 error={!!error}
@@ -61,6 +66,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
                 color={'primary'}
                 onBlur={blurHandler}
                 disabled={disabled}
+                style={{marginLeft: '5px'}}
             >
                 <ControlPoint />
             </IconButton>

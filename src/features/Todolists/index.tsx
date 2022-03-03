@@ -1,26 +1,45 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 
-import {AddItemForm} from '../../components/AddItemForm';
+import {AddItemForm, AddItemFromSubmitHelperType} from '../../components/AddItemForm';
 import {Todolist} from './Todolist';
 
+import {useAppDispatch} from '../../state/store';
 import {selectTodolsts, todolistsActions} from '../../state/reducers/todolist-reducer';
 import {selectTask} from '../../state/reducers/task-reducer';
 import {selectIsLoggedIn} from '../../state/reducers/auth-reducer';
 
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 
 import {useActions} from '../../state/hooks/useActions';
 
 
 export const TodolistList: React.FC<{}> = React.memo(() => {
+  const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const todolists = useSelector(selectTodolsts);
   const tasks = useSelector(selectTask);
 
-  const {addTodolist, fetchTodolist} = useActions(todolistsActions);
+  const {fetchTodolist} = useActions(todolistsActions);
+
+  const addTodolistCallback = useCallback(async (param: {title: string}, helper: AddItemFromSubmitHelperType) => {
+
+    let thunk = todolistsActions.addTodolist({title: param.title});
+    const resultAction = await dispatch(thunk);
+
+    if (todolistsActions.addTodolist.rejected.match(resultAction)) {
+      if (resultAction.payload?.errors?.length) {
+
+        const errorMessage = resultAction.payload?.errors[0];
+        helper.setError(errorMessage);
+      } else {
+        helper.setError('Some error uccured');
+      }
+    } else {
+      helper.setTitle('');
+    }
+  }, [])
 
   useEffect(() => {
     fetchTodolist();
@@ -33,20 +52,20 @@ export const TodolistList: React.FC<{}> = React.memo(() => {
   return (
     <>
       <Grid container style={{padding: '20px 0px'}}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistCallback} />
       </Grid>
-      <Grid container spacing={7}>
+      <Grid container spacing={7} style={{flexWrap: 'nowrap', overflowX: 'auto', paddingRight: '10px'}}>
         {todolists.map(tl => {
           let allTodolistTasks = tasks[tl.id]
           return (
             <Grid item key={tl.id}>
-              <Paper elevation={3} style={{padding: '10px'}}>
+              <div style={{width: '300px'}}>
                 <Todolist
                   key={tl.id}
                   todolist={tl}
                   tasks={allTodolistTasks}
                 />
-              </Paper>
+              </div>
             </Grid>
           )
         })}

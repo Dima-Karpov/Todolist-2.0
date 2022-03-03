@@ -4,7 +4,7 @@ import {authApi, LoginParamsType} from '../../dal/login-api';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AxiosError} from 'axios';
 import {FieldErrorType} from '../../dal/todolists-api';
-import {AppRootStateType} from '../store';
+import {AppRootStateType, ThunkError} from '../store';
 
 const initialState = {
   isLoggedIn: false,
@@ -13,7 +13,7 @@ const initialState = {
 export const loginUser = createAsyncThunk<
                                       undefined,
                                       {dataLogin: LoginParamsType},
-                                      {rejectValue: {errors: string[], fieldsErrors?: FieldErrorType[]}}
+                                      ThunkError
                                         >('auth/loginUser', async (param, thunkAPI) => {
   thunkAPI.dispatch(setAppStatus({status: 'loading'}))
   try {
@@ -42,12 +42,12 @@ export const loguotUser = createAsyncThunk('auth/loguotUser', async (param, thun
       return;
     } else {
       handleServerAppError(result.data, thunkAPI.dispatch);
-      return thunkAPI.rejectWithValue({});
+      return thunkAPI.rejectWithValue({errors: result.data.messages, fieldsErrors: result.data.fieldsError});
     }
   } catch (e: any) {
     let error: AxiosError<any> = e;
     handleServerNetworkError(error, thunkAPI.dispatch);
-    return thunkAPI.rejectWithValue({});
+    return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: undefined});
   } finally {
     thunkAPI.dispatch(setAppStatus({status: 'failed'}));
   }

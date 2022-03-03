@@ -4,17 +4,18 @@ import './index.css';
 import {FilterValuesType, TodolistDomainType, todolistsActions} from "../../../state/reducers/todolist-reducer";
 import {tasksActions} from '../../../state/reducers/task-reducer';
 
-import {AddItemForm} from "../../../components/AddItemForm";
+import {AddItemForm, AddItemFromSubmitHelperType} from "../../../components/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan";
 import {Task} from "./Task";
 
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Paper from '@mui/material/Paper';
 
 import {useActions} from '../../../state/hooks/useActions';
 import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
-import {PropTypes} from '@mui/material';
 import Button from '@mui/material/Button';
+import {useAppDispatch} from '../../../state/store';
 
 
 type TodolistPropsType = {
@@ -25,6 +26,7 @@ type TodolistPropsType = {
 
 export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   const {todolist, tasks, } = props;
+  const dispatch = useAppDispatch();
 
   const {changeTodolistTitle, removeTodolist, changeTodolistFilter} = useActions(todolistsActions);
   const {addTask} = useActions(tasksActions);
@@ -42,8 +44,21 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
   }, [changeTodolistFilter, todolist.id]);
 
 
-  const addNewTask = useCallback((param: {title: string}) => {
-    addTask({todolistId: todolist.id, title: param.title});
+  const addNewTask = useCallback(async (param: {title: string}, helper: AddItemFromSubmitHelperType) => {
+    let thunk = tasksActions.addTask({todolistId: todolist.id, title: param.title});
+    const resultAction = await dispatch(thunk);
+
+    if(tasksActions.addTask.rejected.match(resultAction)){
+      if(resultAction.payload?.errors?.length){
+
+        const errorMessage = resultAction.payload?.errors[0];
+        helper.setError(errorMessage);
+      } else {
+        helper.setError('Some error uccured');
+      }
+    } else{
+      helper.setTitle('')
+    }
   }, [addTask, todolist.id]);
 
   const getTasksForTodoList = useCallback(() => {
@@ -79,10 +94,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
     outlined?: boolean
   ) => {
     const additionalOption = outlined ? 'outlined' : 'contained';
+    const varian = todolist.filter === buttonFilter ? additionalOption : 'text';
 
     return (
       <Button
-        variant={todolist.filter === buttonFilter ? additionalOption : 'text'}
+        variant={varian}
         color={'primary'}
         onClick={onClick}>
         {text}
@@ -92,23 +108,25 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
 
 
   return (
-    <div>
+    <Paper elevation={3} style={{padding: '10px', position: 'relative', marginBottom: '20px'}}>
+      <IconButton
+        color={'success'}
+        size="medium"
+        onClick={deleteTodolsit}
+        disabled={todolist.entityStatus === 'loading'}
+        style={{position: 'absolute', right: '5px', top: '5px'}}
+      >
+        <DeleteIcon fontSize="inherit" />
+      </IconButton>
       <h3>
         <EditableSpan title={todolist.title} onChange={replaceNewTitleTodolsit} />
-        <IconButton
-          color={'success'}
-          size="medium"
-          onClick={deleteTodolsit}
-          disabled={todolist.entityStatus === 'loading'}
-        >
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
       </h3>
 
       <AddItemForm addItem={addNewTask} disabled={todolist.entityStatus === 'loading'} />
 
       <div>
         {сurrentTasks}
+        {!newTasks.length && <div className='warningBlock'>No task</div>}
       </div>
 
       <div className='block-button'>
@@ -116,7 +134,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props) => {
         {renderFilterButton('active', onActiveClickHandler, 'Active')}
         {renderFilterButton('completed', onCompletedClickHandler, 'Completed')}
       </div>
-    </div>
+    </Paper>
   )
 });
 

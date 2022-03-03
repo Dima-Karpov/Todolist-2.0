@@ -1,11 +1,12 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions'
 import { Task } from '.'
 import { TaskPriorities, TaskStatuses } from '../../../../dal/todolists-api';
+import {ReduxStoreProviderDecorator} from '../../../../stories/decorators/ReduxStoreProviderDecorator';
 
 export default {
     title: 'Task Component',
     component: Task,
+    decorators: [ReduxStoreProviderDecorator]
 };
 
 export const TaskBaseExample = (props: any) => {

@@ -6,6 +6,7 @@ import {appReducer} from "./reducers/app-reducer";
 import {authReducer} from "./reducers/auth-reducer";
 import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
+import {FieldErrorType} from "../dal/todolists-api";
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
@@ -23,6 +24,7 @@ export const store = configureStore({
 });
 
  type AppDispatchType = typeof store.dispatch;
+export type ThunkError = {rejectValue: {errors: string[], fieldsErrors?: FieldErrorType[]}};
 
 export const useAppDispatch = () => useDispatch<AppDispatchType>();
 

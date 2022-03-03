@@ -27,7 +27,11 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
 
   const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked;
-    updateTask({todolistId, taskId: task.id, domainModel: {status: newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New}})
+    updateTask({
+      todolistId,
+      taskId: task.id,
+      domainModel: {status: newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New}
+    });
   }, [updateTask, task.id, todolistId]);
 
   const onChangeTaskTitle = useCallback((title: string) => {
@@ -35,7 +39,10 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
   }, [updateTask, task.id, todolistId]);
 
   return (
-    <div className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>
+    <div
+      className={task.status === TaskStatuses.Completed ? 'is-done' : ''}
+      style={{position: 'relative'}}
+    >
       <Checkbox
         checked={task.status === TaskStatuses.Completed}
         onChange={onChangeHandler}
@@ -46,7 +53,12 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
           },
         }} />
       <EditableSpan title={task.title} onChange={onChangeTaskTitle} />
-      <IconButton color={'success'} size="small" onClick={deletingUnnecessaryTask}>
+      <IconButton
+        color={'success'}
+        size="small"
+        onClick={deletingUnnecessaryTask}
+        style={{position: 'absolute', top: '5px', right: '0'}}
+      >
         <DeleteIcon fontSize="inherit" />
       </IconButton>
     </div>

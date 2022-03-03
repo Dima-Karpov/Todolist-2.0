@@ -43,7 +43,7 @@ export const App: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     initializeApp();
-  }, [initializeApp]);
+  }, []);
 
 
   if (!isInitialized)

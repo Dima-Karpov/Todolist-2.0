@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {RequestStatusType, todolistApi, TodolistType} from '../../dal/todolists-api';
-import {AppRootStateType} from '../store';
+import {FieldErrorType, RequestStatusType, todolistApi, TodolistType} from '../../dal/todolists-api';
+import {AppRootStateType, ThunkError} from '../store';
 
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {setAppStatus} from "./app-reducer";
 import {tasksActions} from './task-reducer';
+import { AxiosError } from 'axios';
 
 export const fetchTodolist = createAsyncThunk('todolists/fetchTodolist', async (param, thunkAPI) => {
     try
@@ -63,24 +64,29 @@ export const changeTodolistTitle = createAsyncThunk('todolists/changeTodolistTit
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}));
         }
     });
-export const addTodolist = createAsyncThunk('todolists/addTodolist', async (param: {title: string}, thunkAPI) => {
+export const addTodolist = createAsyncThunk<
+    {todolist: TodolistType},
+    {title: string},
+    ThunkError
+>('todolists/addTodolist', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}));
     try
     {
-        const res = await todolistApi.createTodo(param.title);
-        if (res.data.resultCode === 0)
+        const result = await todolistApi.createTodo(param.title);
+        if (result.data.resultCode === 0)
         {
-            return {todolist: res.data.data.item};
+            return {todolist: result.data.data.item};
         } else
         {
-            handleServerAppError(res.data, thunkAPI.dispatch);
-            return thunkAPI.rejectWithValue({});
+            handleServerAppError(result.data, thunkAPI.dispatch, false);
+            return thunkAPI.rejectWithValue({errors: result.data.messages, fieldsErrors: result.data.fieldsError});
         }
-    } catch (error)
+    } catch (e: any)
     {
-        handleServerNetworkError(error, thunkAPI.dispatch);
+        let error: AxiosError<any> = e;
+        handleServerNetworkError(error, thunkAPI.dispatch, false);
         thunkAPI.dispatch(setAppStatus({status: 'failed'}));
-        return thunkAPI.rejectWithValue({});
+        return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: undefined});
     } finally
     {
         thunkAPI.dispatch(setAppStatus({status: 'succeeded'}));
@@ -106,7 +112,8 @@ const slice = createSlice({
         });
         builder.addCase(removeTodolist.fulfilled, (state, action) => {
             const index = state.findIndex(todolist => todolist.id === action.payload.id);
-            if (index > -1) {
+            if (index > -1)
+            {
                 state.splice(index, 1);
             }
         });
