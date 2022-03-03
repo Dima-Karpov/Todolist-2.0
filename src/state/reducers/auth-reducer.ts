@@ -3,8 +3,7 @@ import {setAppStatus} from './app-reducer';
 import {authApi, LoginParamsType} from '../../dal/login-api';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AxiosError} from 'axios';
-import {FieldErrorType} from '../../dal/todolists-api';
-import {AppRootStateType, ThunkError} from '../store';
+import {AppRootStateType, ThunkError} from '../types';
 
 const initialState = {
   isLoggedIn: false,
@@ -79,12 +78,3 @@ export const selectIsLoggedIn = (state: AppRootStateType) => state.auth.isLogged
 
 export const authActions = {loginUser, loguotUser, ...slice.reducer}
 
-export type ErrorType = {
-  config: any
-  isAxiosError: boolean
-  request: any
-  response: any
-  toJSON: any
-  message: string
-  stack: string
-}

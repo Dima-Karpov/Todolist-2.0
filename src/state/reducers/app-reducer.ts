@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {authApi} from '../../dal/login-api';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
-import {AppRootStateType} from '../store';
 import {setIsLoggedIn} from './auth-reducer';
+import {AppRootStateType} from '../types';
 
 type InitialStateType = {
   status: RequestStatusType,

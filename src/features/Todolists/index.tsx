@@ -5,7 +5,6 @@ import {Navigate} from 'react-router-dom';
 import {AddItemForm, AddItemFromSubmitHelperType} from '../../components/AddItemForm';
 import {Todolist} from './Todolist';
 
-import {useAppDispatch} from '../../state/store';
 import {selectTodolsts, todolistsActions} from '../../state/reducers/todolist-reducer';
 import {selectTask} from '../../state/reducers/task-reducer';
 import {selectIsLoggedIn} from '../../state/reducers/auth-reducer';
@@ -13,6 +12,7 @@ import {selectIsLoggedIn} from '../../state/reducers/auth-reducer';
 import Grid from '@mui/material/Grid';
 
 import {useActions} from '../../state/hooks/useActions';
+import {useAppDispatch} from '../../utils/redux-utils';
 
 
 export const TodolistList: React.FC<{}> = React.memo(() => {

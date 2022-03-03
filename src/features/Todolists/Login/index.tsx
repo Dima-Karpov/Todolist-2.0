@@ -3,8 +3,8 @@ import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 import {FormikHelpers, useFormik} from 'formik';
 
-import {useAppDispatch} from '../../../state/store';
 import {loginUser, selectIsLoggedIn} from '../../../state/reducers/auth-reducer';
+import {useAppDispatch} from '../../../utils/redux-utils';
 
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';

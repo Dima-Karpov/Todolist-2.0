@@ -15,7 +15,7 @@ import Paper from '@mui/material/Paper';
 import {useActions} from '../../../state/hooks/useActions';
 import {TaskStatuses, TaskType} from "../../../dal/todolists-api";
 import Button from '@mui/material/Button';
-import {useAppDispatch} from '../../../state/store';
+import {useAppDispatch} from '../../../utils/redux-utils';
 
 
 type TodolistPropsType = {

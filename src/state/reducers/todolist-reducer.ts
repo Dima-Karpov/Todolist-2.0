@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {FieldErrorType, RequestStatusType, todolistApi, TodolistType} from '../../dal/todolists-api';
-import {AppRootStateType, ThunkError} from '../store';
+import {RequestStatusType, todolistApi, TodolistType} from '../../dal/todolists-api';
+import {AppRootStateType, ThunkError} from '../types';
 
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {handleAsuncServerNetworkError, handleServerAppError, handleServerNetworkError, handleAsuncServerAppError} from "../../utils/error-utils";
 import {setAppStatus} from "./app-reducer";
 import {tasksActions} from './task-reducer';
-import { AxiosError } from 'axios';
+import {AxiosError} from 'axios';
 
 export const fetchTodolist = createAsyncThunk('todolists/fetchTodolist', async (param, thunkAPI) => {
     try
@@ -30,10 +30,9 @@ export const removeTodolist = createAsyncThunk('todolists/removeTodolist', async
         thunkAPI.dispatch(changeTodolistEntityStatus({id: param.todoListId, status: 'loading'}));
         await todolistApi.deletTodo(param.todoListId);
         return {id: param.todoListId};
-    } catch (error)
+    } catch (error: any)
     {
-        handleServerNetworkError(error, thunkAPI.dispatch);
-        return thunkAPI.rejectWithValue({});
+        return handleAsuncServerNetworkError(error, thunkAPI);
     } finally
     {
         thunkAPI.dispatch(setAppStatus({status: 'succeeded'}));
@@ -45,20 +44,16 @@ export const changeTodolistTitle = createAsyncThunk('todolists/changeTodolistTit
         thunkAPI.dispatch(setAppStatus({status: 'loading'}));
         try
         {
-            const res = await todolistApi.updateTodo(param.todolistId, param.title);
-            if (res.data.resultCode === 0)
+            const result = await todolistApi.updateTodo(param.todolistId, param.title);
+            if (result.data.resultCode === 0)
             {
                 return {id: param.todolistId, title: param.title};
-            } else
-            {
-                handleServerAppError(res.data, thunkAPI.dispatch);
-                return thunkAPI.rejectWithValue({});
+            } else {
+                return handleAsuncServerAppError(result.data, thunkAPI)
             }
-        } catch (error)
+        } catch (error: any)
         {
-            handleServerNetworkError(error, thunkAPI.dispatch);
-            thunkAPI.dispatch(setAppStatus({status: 'failed'}));
-            return thunkAPI.rejectWithValue({});
+            return handleAsuncServerNetworkError(error, thunkAPI);
         } finally
         {
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}));
@@ -78,8 +73,7 @@ export const addTodolist = createAsyncThunk<
             return {todolist: result.data.data.item};
         } else
         {
-            handleServerAppError(result.data, thunkAPI.dispatch, false);
-            return thunkAPI.rejectWithValue({errors: result.data.messages, fieldsErrors: result.data.fieldsError});
+            return handleAsuncServerAppError(result.data, thunkAPI, false)
         }
     } catch (e: any)
     {
