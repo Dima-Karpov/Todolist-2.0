@@ -1,5 +1,6 @@
 import {FieldErrorType} from '../../dal/todolists-api';
-import {rootReducer, store} from '../store';
+import {rootReducer} from '../reducers';
+import {store} from '../store';
 
 //redux common types
 export type AppRootStateType = ReturnType<typeof rootReducer>
