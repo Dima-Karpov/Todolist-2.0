@@ -1,8 +1,10 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {authApi} from '../../dal/login-api';
-import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {setIsLoggedIn} from './auth-reducer';
-import {AppRootStateType} from '../types';
+
+import {handleAsuncServerNetworkError, handleAsuncServerAppError} from '../../utils/error-utils';
+import {AppRootStateType, ThunkError} from '../types';
 
 type InitialStateType = {
   status: RequestStatusType,
@@ -16,19 +18,21 @@ const initialState: InitialStateType = {
   isInitialized: false,
 };
 
-export const initializeApp = createAsyncThunk('app/initializeApp', async (param, thunkAPI) => {
-  thunkAPI.dispatch(setAppInitialized({isInitialized: false}))
+export const initializeApp = createAsyncThunk<
+ undefined,
+ undefined,
+ ThunkError
+>('app/initializeApp', async (param, thunkAPI) => {
+  // thunkAPI.dispatch(setAppInitialized({isInitialized: false}))
   try {
     const result = await authApi.me()
     if (result.data.resultCode === 0) {
       thunkAPI.dispatch(setIsLoggedIn({isLoggedIn: true}));
     } else {
-      handleServerAppError(result.data, thunkAPI.dispatch);
-      return thunkAPI.rejectWithValue({});
+      return handleAsuncServerAppError(result.data, thunkAPI);
     }
-  } catch (error) {
-    handleServerNetworkError(error, thunkAPI.dispatch);
-    return thunkAPI.rejectWithValue({});
+  } catch (error: any) {
+    return handleAsuncServerNetworkError(error, thunkAPI);
   }
 
 });
@@ -59,7 +63,7 @@ export const {setAppError, setAppStatus, setAppInitialized} = slice.actions;
 export const selectStatus = (state: AppRootStateType) => state.app.status;
 export const selectIsInitialized = (state: AppRootStateType) => state.app.isInitialized;
 
-export const appActions = {initializeApp, ...slice.reducer};
+export const appActions = {initializeApp, ...slice.actions};
 
 export type SetErrorType = ReturnType<typeof setAppError>
 export type SetStatusType = ReturnType<typeof setAppStatus>
