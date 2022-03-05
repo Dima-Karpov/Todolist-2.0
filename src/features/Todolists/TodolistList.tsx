@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 
@@ -6,12 +6,12 @@ import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
 
 import {AppRootStateType} from '../../state/store';
-import {addTodolist, fetchTodolist, TodolistDomainType} from '../../state/reducers/todolist-reducer';
+import {TodolistDomainType} from '../../state/reducers/todolist-reducer';
 import {TasksStateType} from '../../state/reducers/task-reducer';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-
+import {addTodolist, fetchTodolist} from "../../state/reducers/todolist-sagas";
 
 
 type TodolistListPropsType = {}
@@ -28,7 +28,7 @@ export const TodolistList: React.FC<TodolistListPropsType> = React.memo(props =>
 
   useEffect(() => {
     dispatch(fetchTodolist())
-  }, [dispatch]);
+  }, []);
   
   if (!isLoggedIn) {
     return <Navigate to={'/login'} />

@@ -4,7 +4,6 @@ import {Navigate} from 'react-router-dom';
 import {useFormik} from 'formik';
 
 import {AppRootStateType} from '../../../state/store';
-import {loginUser} from '../../../state/reducers/auth-reducer';
 
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
@@ -14,6 +13,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import {loginUser} from "../../../state/reducers/auth-sagas";
 
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,9 +44,10 @@ export const Login: React.FC = () => {
     },
   });
 
+
   if (isLoggedIn){
     return <Navigate to={'/'}/>
-  };
+  }
 
   return (
     <Grid container justifyContent={'center'}>

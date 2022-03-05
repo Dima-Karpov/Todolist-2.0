@@ -8,8 +8,7 @@ import {Login} from '../features/Todolists/Login/Login';
 import {CircularProgressWithLabel} from '../features/Progress';
 
 import {AppRootStateType} from '../state/store';
-import {loguotUser} from '../state/reducers/auth-reducer';
-import {RequestStatusType, initializeApp} from '../state/reducers/app-reducer';
+import {RequestStatusType} from '../state/reducers/app-reducer';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,6 +18,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
+import {initializeApp} from "../state/reducers/app-sagas";
+import { logoutUser } from '../state/reducers/auth-sagas';
 
 
 
@@ -43,7 +44,7 @@ export const App: React.FC = (): JSX.Element => {
   }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(loguotUser());
+    dispatch(logoutUser());
   }, []);
 
   if (!isInitialized) {
