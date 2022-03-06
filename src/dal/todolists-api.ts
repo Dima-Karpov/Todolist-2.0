@@ -4,7 +4,7 @@ export const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
     headers: {
-        'API-KEY': '9e8978ae-0246-4c6d-84c4-bc28bfa5ba72',
+        'API-KEY': 'aa9fae84-9266-4dd0-9432-7db95eb02939',
     },
 });
 
@@ -21,8 +21,8 @@ export const todolistApi = {
     updateTodo(todoListId: string, title: string): Promise<AxiosResponse<CommonResponseType>> {
         return instance.put<{ title: string }, AxiosResponse<CommonResponseType<{ item: TodolistType }>>>(`todo-lists/${todoListId}`, {title})
     },
-    getTasks(todolistId: string): Promise<AxiosResponse<GetTasksResponse>> {
-        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
+    getTasks(todolistId: string): Promise<GetTasksResponse> {
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`).then(res => res.data)
     },
     addTask(todolistId: string, title: string) {
         return instance.post<{ title: string }, AxiosResponse<CommonResponseType<{ item: TaskType }>>>(`todo-lists/${todolistId}/tasks`, {title})

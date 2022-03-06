@@ -4,6 +4,7 @@ import {setAppStatus} from "./app-reducer";
 import {AxiosResponse} from "axios";
 import {CommonResponseType} from "../../dal/todolists-api";
 import {setIsLoggedIn} from "./auth-reducer";
+import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/error-utils";
 
 export function* loginUserWorkerSaga(acton: ReturnType<typeof loginUser>) {
     yield put(setAppStatus('loading'))
@@ -12,9 +13,11 @@ export function* loginUserWorkerSaga(acton: ReturnType<typeof loginUser>) {
         if (result.data.resultCode === 0) {
             yield put(setIsLoggedIn(true));
         } else {
+            yield* handleServerAppErrorSaga(result.data)
         }
         yield put(setAppStatus('succeeded'));
     } catch (error) {
+        yield* handleServerNetworkErrorSaga(error)
     } finally {
         yield put(setAppStatus('failed'));
     }
@@ -29,8 +32,10 @@ export function* logoutUserWorkerSaga() {
         if (result.data.resultCode === 0) {
             yield put(setIsLoggedIn(false));
         } else {
+            yield* handleServerAppErrorSaga(result.data)
         }
     } catch (error) {
+        yield* handleServerNetworkErrorSaga(error)
     } finally {
         yield put(setAppStatus('failed'));
     }

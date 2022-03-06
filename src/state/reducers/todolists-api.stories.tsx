@@ -1,6 +1,5 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { todolistApi, UpdateTaskModelType } from '../../dal/todolists-api';
+import React, {useEffect, useState} from 'react';
+import {todolistApi, UpdateTaskModelType} from '../../dal/todolists-api';
 
 export default {
     title: 'API',
@@ -142,8 +141,8 @@ export const GetTasks = () => {
 
     const getTasks = () => {
         todolistApi.getTasks(todolistId)
-            .then(res => {
-                setStateTasks(res.data);
+            .then(data => {
+                setStateTasks(data);
                 alert(`Tasks received`);
             })
             .catch(e => alert(e))
@@ -221,8 +220,8 @@ export const DeleteTask = () => {
     };
     const getTasks = () => {
         todolistApi.getTasks(todolistId)
-            .then(res => {
-                setStateTasks(res.data);
+            .then(data => {
+                setStateTasks(data);
                 alert(`Tasks received`);
             })
             .catch(e => alert(e))
@@ -292,8 +291,8 @@ export const UpdateTask = () => {
     };
     const getTasks = () => {
         todolistApi.getTasks(todolistId)
-            .then(res => {
-                setStateTasks(res.data);
+            .then(data => {
+                setStateTasks(data);
                 alert(`Tasks received`);
             })
             .catch(e => alert(e))

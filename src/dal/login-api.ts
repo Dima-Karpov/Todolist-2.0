@@ -3,8 +3,9 @@ import {AxiosResponse} from 'axios';
 
 
 export const authApi = {
-  me(): Promise<AxiosResponse<CommonResponseType<{id: number, email: string, login: string}>>>{
+  me(){
     return instance.get<{}, AxiosResponse<CommonResponseType<{id: number, email: string, login: string}>>>('auth/me')
+        .then(res => res.data)
   },
   login(dataLogin: LoginParamsType): Promise<AxiosResponse<CommonResponseType<{userId?: number}>>> {
     return instance.post<{}, AxiosResponse<CommonResponseType<{userId?: number}>>>('auth/login', dataLogin)

@@ -3,22 +3,22 @@ import {call, put, takeEvery} from "redux-saga/effects";
 import {authApi} from "../../dal/login-api";
 import {setIsLoggedIn} from "./auth-reducer";
 import {setAppInitialized} from "./app-reducer";
-import {AxiosResponse} from "axios";
+import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/error-utils";
 
 //sagas
-function* initializeAppWorkerSaga() {
+export function* initializeAppWorkerSaga() {
     try {
-        const result: AxiosResponse<CommonResponseType<{ id: number, email: string, login: string }>> =
+        const data: CommonResponseType<{ id: number, email: string, login: string }> =
             yield call(authApi.me)
 
-        if (result.data.resultCode === 0) {
+        if (data.resultCode === 0) {
             yield put(setIsLoggedIn(true));
             yield put(setAppInitialized(true));
         } else {
-
+            yield* handleServerAppErrorSaga(data)
         }
     } catch (error) {
-
+        yield* handleServerNetworkErrorSaga(error)
     } finally {
         yield put(setAppInitialized(true));
     }

@@ -9,6 +9,7 @@ import {tasksWatcherSaga} from "./reducers/tasks-sagas";
 import {appWatcherSaga,} from "./reducers/app-sagas";
 import {todolistWatcherSaga} from "./reducers/todolist-sagas";
 import {authWatcherSaga} from "./reducers/auth-sagas";
+import { all } from "redux-saga/effects";
 
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
@@ -26,8 +27,5 @@ export const store = createStore(rootReducer, applyMiddleware(thunk, sagaMiddlew
 sagaMiddleware.run(rootWatcher)
 
 function* rootWatcher() {
-    yield appWatcherSaga()
-    yield authWatcherSaga()
-    yield tasksWatcherSaga()
-    yield todolistWatcherSaga()
+    yield all([appWatcherSaga(), authWatcherSaga(), tasksWatcherSaga(), todolistWatcherSaga()])
 }
