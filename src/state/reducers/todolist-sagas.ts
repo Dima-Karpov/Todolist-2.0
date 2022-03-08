@@ -40,6 +40,7 @@ export function* removeTodolistWorkerSaga(action: ReturnType<typeof removeTodoli
     }
 }
 
+
 export const removeTodolist = (todoListId: string) => ({type: 'TODOLIST/REMOVE-CURRENT-TODOLIST', todoListId});
 
 export function* addTodolistWorkerSaga(action: ReturnType<typeof addTodolist>) {
