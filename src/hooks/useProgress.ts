@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {timeProgress} from "../consts";
 
-
 export const useProgress = () => {
     const [progress, setProgress] = useState(10);
 
