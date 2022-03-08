@@ -1,4 +1,3 @@
-
 import thunk from "redux-thunk";
 import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import {rootReducer} from "./reducers";

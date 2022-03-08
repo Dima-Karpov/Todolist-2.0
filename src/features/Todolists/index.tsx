@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {Navigate} from 'react-router-dom';
 
@@ -13,65 +13,70 @@ import Grid from '@mui/material/Grid';
 
 import {useActions} from '../../state/hooks/useActions';
 import {useAppDispatch} from '../../utils/redux-utils';
+import {someError, emptyString} from "../../consts";
+import {login} from "../../endpoints";
 
 
-export const TodolistList: React.FC<{}> = React.memo(() => {
-  const dispatch = useAppDispatch();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const todolists: TodolistDomainType[] = useSelector(selectTodolsts);
-  const tasks = useSelector(selectTask);
+export const TodolistList: FC = () => {
+    const dispatch = useAppDispatch();
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const todolists: TodolistDomainType[] = useSelector(selectTodolsts);
+    const tasks = useSelector(selectTask);
 
-  const {fetchTodolist} = useActions(todolistsActions);
+    const {fetchTodolist} = useActions(todolistsActions);
 
-  const addTodolistCallback = useCallback(async (param: {title: string}, helper: AddItemFromSubmitHelperType) => {
+    const addTodolistCallback = useCallback(async (param: { title: string }, helper: AddItemFromSubmitHelperType) => {
 
-    let thunk = todolistsActions.addTodolist({title: param.title});
-    const resultAction = await dispatch(thunk);
+        const resultAction = await dispatch(todolistsActions.addTodolist({title: param.title}));
 
-    if (todolistsActions.addTodolist.rejected.match(resultAction)) {
-      if (resultAction.payload?.errors?.length) {
+        if (todolistsActions.addTodolist.rejected.match(resultAction)) {
+            if (resultAction.payload?.errors?.length) {
 
-        const errorMessage = resultAction.payload?.errors[0];
-        helper.setError(errorMessage);
-      } else {
-        helper.setError('Some error uccured');
-      }
-    } else {
-      helper.setTitle('');
+                const errorMessage = resultAction.payload?.errors[0];
+                helper.setError(errorMessage);
+            } else {
+                helper.setError(someError);
+            }
+        } else {
+            helper.setTitle(emptyString);
+        }
+    }, [dispatch])
+
+    useEffect(() => {
+        if (!todolists.length) {
+            fetchTodolist();
+        }
+    }, [todolists, fetchTodolist]);
+
+
+    if (!isLoggedIn) {
+        return <Navigate to={login}/>
     }
-  }, [])
 
-  useEffect(() => {
-    if (!todolists.length){
-      fetchTodolist();
-    }
-  }, []);
-
-  if (!isLoggedIn) {
-    return <Navigate to={'/login'} />
-  };
-
-  return (
-    <>
-      <Grid container style={{padding: '20px 0px'}}>
-        <AddItemForm addItem={addTodolistCallback} />
-      </Grid>
-      <Grid container spacing={7} style={{flexWrap: 'nowrap', overflowX: 'auto', paddingRight: '10px'}}>
-        {todolists.length ? todolists.map(tl => {
-          let allTodolistTasks = tasks[tl.id]
-          return (
-            <Grid item key={tl.id}>
-              <div style={{width: '300px'}}>
-                <Todolist
-                  key={tl.id}
-                  todolist={tl}
-                  tasks={allTodolistTasks}
-                />
-              </div>
+    return (
+        <>
+            <Grid container style={{padding: '20px 0px'}}>
+                <AddItemForm addItem={addTodolistCallback}/>
             </Grid>
-          )
-        }) : <></>}
-      </Grid>
-    </>
-  )
-});
+            <Grid container spacing={7} style={{flexWrap: 'nowrap', overflowX: 'auto', paddingRight: '10px'}}>
+                {todolists.length ? todolists.map(tl => {
+                    let allTodolistTasks = tasks[tl.id]
+
+                    return (
+                        <Grid item key={tl.id}>
+                            <div
+                                style={{width: '300px'}}
+                            >
+                                <Todolist
+                                    key={tl.id}
+                                    todolist={tl}
+                                    tasks={allTodolistTasks}
+                                />
+                            </div>
+                        </Grid>
+                    )
+                }) : <></>}
+            </Grid>
+        </>
+    )
+}

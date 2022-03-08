@@ -8,86 +8,66 @@ import {AppRootStateType, ThunkError} from '../types';
 import {handleAsuncServerNetworkError, handleAsuncServerAppError} from "../../utils/error-utils";
 
 
-export const fetchTasks = createAsyncThunk<
-    {todolistId: string, tasks: TaskType[]},
+export const fetchTasks = createAsyncThunk<{ todolistId: string, tasks: TaskType[] },
     string,
-    ThunkError
->('task/fethcTasks', async (todolistId, thunkAPI) => {
+    ThunkError>('task/fetchTasks', async (todolistId, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}));
-    try
-    {
+    try {
         const res = await todolistApi.getTasks(todolistId);
         const tasks = res.data.items;
         return {todolistId, tasks};
-    } catch (error: any)
-    {
+    } catch (error: any) {
         return handleAsuncServerNetworkError(error, thunkAPI);
-    } finally
-    {
+    } finally {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
     }
 });
-export const deletTask = createAsyncThunk<
-    {todolistId: string, id: string},
-    {todolistId: string, id: string},
-    ThunkError
->('task/deletTask', async (param, thunkAPI) => {
+export const deletTask = createAsyncThunk<{ todolistId: string, id: string },
+    { todolistId: string, id: string },
+    ThunkError>('task/deletTask', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
-    try
-    {
+    try {
         await todolistApi.deletTask(param.todolistId, param.id);
         return {todolistId: param.todolistId, id: param.id};
-    } catch (error: any)
-    {
+    } catch (error: any) {
         return handleAsuncServerNetworkError(error, thunkAPI);
-    } finally
-    {
+    } finally {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
     }
 
 });
-export const addTask = createAsyncThunk<
-    TaskType,
-    {todolistId: string, title: string},
-    ThunkError
->('task/addTask', async (param, thunkAPI) => {
+export const addTask = createAsyncThunk<TaskType,
+    { todolistId: string, title: string },
+    ThunkError>('task/addTask', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
-    try
-    {
+    try {
         const result = await todolistApi.addTask(param.todolistId, param.title);
-        if (result.data.resultCode === 0)
-        {
+        if (result.data.resultCode === 0) {
             return result.data.data.item
-        } else
-        {
+        } else {
             return handleAsuncServerAppError(result.data, thunkAPI, false);
         }
-    } catch (error: any)
-    {
+    } catch (error: any) {
         return handleAsuncServerNetworkError(error, thunkAPI, false);
-    } finally
-    {
+    } finally {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
     }
 
 });
-export const updateTask = createAsyncThunk<
-    {todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType},
-    {todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType},
-    ThunkError
->('task/updateTask', async (
-    param: {todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType},
+export const updateTask = createAsyncThunk<{ todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType },
+    { todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType },
+    ThunkError>('task/updateTask', async (
+    param: { todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType },
     thunkAPI) => {
 
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
-    try
-    {
+    try {
         let state = thunkAPI.getState() as AppRootStateType;
         const task = state.tasks[param.todolistId].find(t => t.id === param.taskId);
-        if (!task)
-        {
+        if (!task) {
             return thunkAPI.rejectWithValue({errors: ['task no found in the state']});
-        };
+        }
+
         const apiModel: UpdateTaskModelType = {
             title: task.title,
             description: task.description,
@@ -98,24 +78,17 @@ export const updateTask = createAsyncThunk<
             ...param.domainModel
         };
         const result = await todolistApi.updateTask(param.todolistId, param.taskId, apiModel);
-        if (result.data.resultCode === 0)
-        {
+        if (result.data.resultCode === 0) {
             return param;
-        } else
-        {
+        } else {
             return handleAsuncServerAppError(result.data, thunkAPI)
         }
-    } catch (error: any)
-    {
+    } catch (error: any) {
         return handleAsuncServerNetworkError(error, thunkAPI);
-    } finally
-    {
+    } finally {
         thunkAPI.dispatch(setAppStatus({status: 'failed'}))
     }
 });
-
-
-
 
 
 const slice = createSlice({
@@ -135,18 +108,15 @@ const slice = createSlice({
                 delete state[action.payload.id];
             })
             .addCase(fetchTasks.fulfilled, (state, action) => {
-                if (action.payload)
-                {
+                if (action.payload) {
                     state[action.payload.todolistId] = action.payload.tasks;
                 }
             })
             .addCase(deletTask.fulfilled, (state, action) => {
-                if (action.payload)
-                {
+                if (action.payload) {
                     const tasks = state[action.payload.todolistId];
                     const index = tasks.findIndex(task => task.id === action.payload?.id);
-                    if (index > -1)
-                    {
+                    if (index > -1) {
                         tasks.splice(index, 1);
                     }
                 }
@@ -157,8 +127,7 @@ const slice = createSlice({
             .addCase(updateTask.fulfilled, (state, action) => {
                 const tasks = state[action.payload.todolistId];
                 const index = tasks.findIndex(task => task.id === action.payload.taskId);
-                if (index > -1)
-                {
+                if (index > -1) {
                     tasks[index] = {...tasks[index], ...action.payload.domainModel};
                 }
             })
@@ -182,14 +151,3 @@ export type UpdateDomainTaskModelType = {
     startDate?: string
     deadline?: string
 };
-
-
-export type ErrorType = {
-    config: any
-    isAxiosError: boolean
-    request: any
-    response: any
-    toJSON: any
-    message: string
-    stack: string
-}

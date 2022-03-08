@@ -85,5 +85,5 @@ export const {setIsLoggedIn} = slice.actions;
 
 export const selectIsLoggedIn = (state: AppRootStateType) => state.auth.isLoggedIn;
 
-export const authActions = {loginUser, loguotUser, ...slice.reducer}
+export const authActions = {loginUser, logoutUser: loguotUser, ...slice.reducer}
 
