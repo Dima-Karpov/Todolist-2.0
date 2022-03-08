@@ -1,7 +1,6 @@
 import {CommonResponseType, instance} from './todolists-api';
 import {AxiosResponse} from 'axios';
 
-
 export const authApi = {
   me(){
     return instance.get<{}, AxiosResponse<CommonResponseType<{id: number, email: string, login: string}>>>('auth/me')
