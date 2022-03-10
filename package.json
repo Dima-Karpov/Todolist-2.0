@@ -45,7 +45,7 @@
     "storybook-debug": "start-storybook -p 9009 -s public --no-dll",
     "build-storybook": "build-storybook -s public",
     "jest:integration": "jest -c integration/jest.config.js",
-    "deplou": "gh-pages -b main -d build",
+    "deploi": "gh-pages -d build",
     "predeploy": "yarn run build",
     "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
   },
